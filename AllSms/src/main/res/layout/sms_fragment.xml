@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+                xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
     <LinearLayout
@@ -10,20 +10,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" >
         <Button
-            android:id="@+id/butSave"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/save"
-            />
-
-        <Button
             android:id="@+id/butCancel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/cancel"
-            />
+            tools:ignore="ButtonStyle"/>
+        <Button
+            android:id="@+id/butSave"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/save"
+            tools:ignore="ButtonStyle"/>
     </LinearLayout>
 
     <ScrollView
@@ -66,21 +65,21 @@
                 android:id="@+id/phone_number_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/phone_template_hint"/>
+                android:hint="@string/phone_template_hint" tools:ignore="TextFields"/>
             <Button
                 android:id="@+id/select_phone_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="@string/select_phone_label"
-                android:padding="4dp"/>
+                android:padding="4dp" tools:ignore="RtlHardcoded"/>
             <CheckBox
                 android:id="@+id/sms_is_favorite_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="@string/favorite_template_label"
-                />
+                tools:ignore="RtlHardcoded"/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

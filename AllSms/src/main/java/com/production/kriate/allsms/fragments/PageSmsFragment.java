@@ -1,7 +1,6 @@
 package com.production.kriate.allsms.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,18 +27,21 @@ import com.production.kriate.allsms.db.DbConnector;
 import com.production.kriate.allsms.db.DbSms;
 import com.production.kriate.allsms.view.SlidingTabLayout;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 
 public class PageSmsFragment extends Fragment {
-    public static final int SMS_UPDATE = 0;
-    public static final int SMS_INSERT = 1;
+    private static final int SMS_UPDATE = 0;
+    private static final int SMS_INSERT = 1;
     private final int REQUEST_SEND_SMS = 3;
-    public static final String DIALOG_SEND_SMS = "send_sms";
-    public final static String CURRENT_PAGE_ID = "com.production.kriate.allsms.current_page_id";
-    private SlidingTabLayout mSlidingTabLayout;
+    private static final String DIALOG_SEND_SMS = "send_sms";
+    private final static String CURRENT_PAGE_ID = "com.production.kriate.allsms.current_page_id";
     private ViewPager mViewPager;
     private ArrayList<DbCategory> mCategoryList;
 
+    @NotNull
     public static PageSmsFragment newInstance(int indexPage) {
         Bundle args = new Bundle();
         args.putSerializable(CURRENT_PAGE_ID, indexPage);
@@ -52,28 +54,27 @@ public class PageSmsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mCategoryList = new ArrayList<DbCategory>();
+        mCategoryList = new ArrayList<>();
         mCategoryList.add(new DbCategory(0, getResources().getString(R.string.action_all), null));
         mCategoryList.add(new DbCategory(0, getResources().getString(R.string.action_favorite), null));
         mCategoryList.addAll(DbConnector.newInstance(getActivity()).getCategory().selectAll());
     }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.page_sms, container, false);
-        return rootView;
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.page_sms, container, false);
     }
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mViewPager.setAdapter(new SamplePagerAdapter());
         int currentPage = (int)getArguments().getSerializable(PageSmsFragment.CURRENT_PAGE_ID);
         mViewPager.setCurrentItem(currentPage, true);
 
-        mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
-        mSlidingTabLayout.setViewPager(mViewPager);
+        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+        slidingTabLayout.setViewPager(mViewPager);
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_item_new_template:
                 Intent i = new Intent(getActivity(), EditSmsActivity.class);
@@ -89,7 +90,7 @@ public class PageSmsFragment extends Fragment {
         getActivity().getMenuInflater().inflate(R.menu.sms_list_item_context, menu);
     }
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(@NotNull MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int position = info.position;
         View v = (View)info.targetView.getParent();
@@ -112,7 +113,7 @@ public class PageSmsFragment extends Fragment {
         return super.onContextItemSelected(item);
     }
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @NotNull Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             DbSms dbSms = (DbSms) data.getExtras().getSerializable(EditSmsFragment.EXTRA_SMS);
             int indexPage = mViewPager.getCurrentItem();
@@ -141,10 +142,6 @@ public class PageSmsFragment extends Fragment {
             return mCategoryList.size();
         }
         @Override
-        public int getItemPosition(Object object) {
-            return super.getItemPosition(object);
-        }
-        @Override
         public boolean isViewFromObject(View view, Object o) {
             return o == view;
         }
@@ -153,7 +150,7 @@ public class PageSmsFragment extends Fragment {
             return mCategoryList.get(position).getName();
         }
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(@NotNull ViewGroup container, int position) {
             View v = getActivity().getLayoutInflater().inflate(R.layout.page_item, container, false);
             container.addView(v);
             final ListView listView = (ListView)v.findViewById(R.id.list_view_sms);
@@ -181,29 +178,29 @@ public class PageSmsFragment extends Fragment {
                     break;
             }
 
-            ListAdapter adapter = new ListAdapter(getActivity(), smsList);
+            ListAdapter adapter = new ListAdapter(smsList);
             listView.setAdapter(adapter);
             registerForContextMenu(listView);
 
             return v;
         }
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        public void destroyItem(@NotNull ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
     }
     private class ListAdapter extends BaseAdapter {
-        private LayoutInflater mLayoutInflater;
         private ArrayList<DbSms> arrayDbSms;
 
-        public ListAdapter (Context ctx, ArrayList<DbSms> arr) {
-            mLayoutInflater = LayoutInflater.from(ctx);
+        public ListAdapter (ArrayList<DbSms> arr) {
             setArrayDbSms(arr);
         }
 
-        public ArrayList<DbSms> getArrayMyData() {
-            return arrayDbSms;
-        }
+// --Commented out by Inspection START (20.02.2015 21:11):
+//        public ArrayList<DbSms> getArrayMyData() {
+//            return arrayDbSms;
+//        }
+// --Commented out by Inspection STOP (20.02.2015 21:11)
 
         public void setArrayDbSms(ArrayList<DbSms> arrayDbSms) {
             this.arrayDbSms = arrayDbSms;
@@ -226,7 +223,8 @@ public class PageSmsFragment extends Fragment {
             return 0;
         }
 
-        public View getView(int position, View convertView, ViewGroup parent) {
+        @Nullable
+        public View getView(int position, @Nullable View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.sms_list_item, null);
             }

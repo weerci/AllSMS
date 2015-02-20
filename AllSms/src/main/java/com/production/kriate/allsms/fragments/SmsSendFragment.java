@@ -1,5 +1,6 @@
 package com.production.kriate.allsms.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,31 +14,36 @@ import android.widget.TextView;
 import com.production.kriate.allsms.db.DbSms;
 import com.production.kriate.allsms.R;
 
+import org.jetbrains.annotations.NotNull;
+
 
 public class SmsSendFragment extends DialogFragment{
     private DbSms mDbSms;
-    private TextView mTextView;
 
+    @NotNull
     public static SmsSendFragment newInstance(DbSms dbSms){
         SmsSendFragment smsSendFragment = new SmsSendFragment();
         smsSendFragment.setDbSms(dbSms);
         return  smsSendFragment;
     }
 
-    public DbSms getDbSms() {
-        return mDbSms;
-    }
-    public void setDbSms(DbSms dbSms) {
+// --Commented out by Inspection START (20.02.2015 21:10):
+//    public DbSms getDbSms() {
+//        return mDbSms;
+//    }
+// --Commented out by Inspection STOP (20.02.2015 21:10)
+    void setDbSms(DbSms dbSms) {
         mDbSms = dbSms;
     }
 
+    @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_send_sms, null);
+        @SuppressLint("InflateParams") View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_send_sms, null);
 
-        mTextView = (TextView)v.findViewById(R.id.dialog_send_sms_text);
+        TextView textView = (TextView) v.findViewById(R.id.dialog_send_sms_text);
         String s = String.format(getResources().getString(R.string.sms_sender_text), mDbSms.getTextSms(), mDbSms.getPhoneNumber());
-        mTextView.setText(s);
+        textView.setText(s);
 
         return new AlertDialog.Builder(getActivity()/*, R.style.AlertDialogCustom*/)
                 .setView(v)
@@ -45,7 +51,7 @@ public class SmsSendFragment extends DialogFragment{
                 .setPositiveButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                sendResult(Activity.RESULT_OK);
+                                sendResult();
                             }
                         }
                 )
@@ -53,13 +59,13 @@ public class SmsSendFragment extends DialogFragment{
                 .create();
     }
 
-    private void sendResult(int resultCode) {
+    private void sendResult() {
         if (getTargetFragment() == null) {
             return;
         }
 
         Intent i = new Intent();
         i.putExtra(EditSmsFragment.EXTRA_SMS, mDbSms);
-        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, i);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
     }
 }

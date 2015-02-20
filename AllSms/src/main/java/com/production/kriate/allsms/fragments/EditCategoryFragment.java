@@ -1,5 +1,6 @@
 package com.production.kriate.allsms.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,8 @@ import com.production.kriate.allsms.db.DbConnector;
 import com.production.kriate.allsms.db.DbSms;
 import com.production.kriate.allsms.view.SlidingTabLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 /**
@@ -34,18 +37,17 @@ import java.util.ArrayList;
  */
 public class EditCategoryFragment extends Fragment {
     public final static String EXTRA_CATEGORY = "com.production.kriate.allsms.EditCategoryFragment.db_category";
-    public final static String DIALOG_ADD_REMOVE_CATEGORY_TO_SMS = "add_remove_category";
+    private final static String DIALOG_ADD_REMOVE_CATEGORY_TO_SMS = "add_remove_category";
     private ArrayList<DbSms> mSelectedSms;
     private ArrayList<DbSms> mAvailableSms;
 
 
-    private Button mSaveButton, mCancelButton;
     private EditText mNameField;
     private long mIdCategory;
-    private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
     private ListView mListView;
 
+    @NotNull
     public static EditCategoryFragment newInstance(DbCategory dc) {
         Bundle args = new Bundle();
         args.putSerializable(EXTRA_CATEGORY, dc);
@@ -60,7 +62,7 @@ public class EditCategoryFragment extends Fragment {
         setHasOptionsMenu(true);
     }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.categroy_fragment, container, false);
 
         mNameField = (EditText) v.findViewById(R.id.category_name_edit_text);
@@ -76,9 +78,9 @@ public class EditCategoryFragment extends Fragment {
         mAvailableSms = DbConnector.newInstance(getActivity()).getCategory().getAvailableSms(mIdCategory);
 
         // Кнопки
-        mSaveButton = (Button) v.findViewById(R.id.categoryButtonSave);
-        mCancelButton = (Button) v.findViewById(R.id.categoryButtonCancel);
-        mSaveButton.setOnClickListener( new View.OnClickListener() {
+        Button saveButton = (Button) v.findViewById(R.id.categoryButtonSave);
+        Button cancelButton = (Button) v.findViewById(R.id.categoryButtonCancel);
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DbCategory dbCategory = new DbCategory(mIdCategory, mNameField.getText().toString(), mSelectedSms);
@@ -89,7 +91,7 @@ public class EditCategoryFragment extends Fragment {
 
             }
         });
-        mCancelButton.setOnClickListener( new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
@@ -99,19 +101,19 @@ public class EditCategoryFragment extends Fragment {
         return v;
     }
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         mViewPager = (ViewPager) view.findViewById(R.id.category_viewpager);
         mViewPager.setAdapter(new SmsPagerAdapter());
 
-        mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.category_sliding_tabs);
-        mSlidingTabLayout.setViewPager(mViewPager);
+        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.category_sliding_tabs);
+        slidingTabLayout.setViewPager(mViewPager);
     }
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(@NotNull Menu menu) {
         menu.findItem(R.id.menu_item_new_template).setVisible(false);
     }
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @NotNull Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             DbSms dbSms = (DbSms)data.getSerializableExtra(AddCategoryFragment.EXTRA_SMS);
             switch (requestCode) {
@@ -135,10 +137,6 @@ public class EditCategoryFragment extends Fragment {
             return 2;
         }
         @Override
-        public int getItemPosition(Object object) {
-            return super.getItemPosition(object);
-        }
-        @Override
         public boolean isViewFromObject(View view, Object o) {
             return o == view;
         }
@@ -152,7 +150,7 @@ public class EditCategoryFragment extends Fragment {
             }
         }
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(@NotNull ViewGroup container, int position) {
             View v = getActivity().getLayoutInflater().inflate(R.layout.page_item, container, false);
             container.addView(v);
             mListView = (ListView)v.findViewById(R.id.list_view_sms);
@@ -191,22 +189,22 @@ public class EditCategoryFragment extends Fragment {
             return v;
         }
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        public void destroyItem(@NotNull ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
     }
     private class ListSmsAdapter extends BaseAdapter {
-        private LayoutInflater mLayoutInflater;
         private ArrayList<DbSms> arrayDbSms;
 
-        public ListSmsAdapter (Context ctx, ArrayList<DbSms> arr) {
-            mLayoutInflater = LayoutInflater.from(ctx);
+        public ListSmsAdapter (@NotNull Context ctx, ArrayList<DbSms> arr) {
             setArrayDbSms(arr);
         }
 
-        public ArrayList<DbSms> getArrayMyData() {
-            return arrayDbSms;
-        }
+// --Commented out by Inspection START (20.02.2015 21:11):
+//        public ArrayList<DbSms> getArrayMyData() {
+//            return arrayDbSms;
+//        }
+// --Commented out by Inspection STOP (20.02.2015 21:11)
 
         public void setArrayDbSms(ArrayList<DbSms> arrayDbSms) {
             this.arrayDbSms = arrayDbSms;
@@ -229,7 +227,9 @@ public class EditCategoryFragment extends Fragment {
             return 0;
         }
 
-        public View getView(int position, View convertView, ViewGroup parent) {
+        @SuppressLint("InflateParams")
+        @org.jetbrains.annotations.Nullable
+        public View getView(int position, @org.jetbrains.annotations.Nullable View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.sms_list_item, null);
             }

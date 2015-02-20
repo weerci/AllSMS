@@ -11,6 +11,7 @@
         android:id="@+id/sms_list_img_favorite"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:contentDescription="@string/favorite_template_label"
         />
 
     <LinearLayout
@@ -24,10 +25,9 @@
             android:textStyle="bold"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:text="Sms title"/>
+            tools:text="Sms title"/>
         <TextView
             android:id="@+id/sms_list_item_text_text_view"
-            android:layout_below="@id/sms_list_item_title_text_view"
             style="@style/text_list_text"
             tools:text="Sms text, very, very big. And only big"/>
         <TextView

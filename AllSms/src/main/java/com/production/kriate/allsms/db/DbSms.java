@@ -1,5 +1,7 @@
 package com.production.kriate.allsms.db;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 /**
@@ -9,11 +11,11 @@ import java.io.Serializable;
 public class DbSms implements Serializable {
     public static final long EMPTY_ID = -1;
 
-    private long mId;       // Идентификатор шаблона в базе
-    private String mTitleSms;  // Название шаблона
-    private String mTextSms;   // Текст отправляемый в SMS
-    private String mPhoneNumber;    // Номер по которому отправляется SMS
-    private int mPriority;  // Приоритет шаблона
+    private final long mId;       // Идентификатор шаблона в базе
+    private final String mTitleSms;  // Название шаблона
+    private final String mTextSms;   // Текст отправляемый в SMS
+    private final String mPhoneNumber;    // Номер по которому отправляется SMS
+    private final int mPriority;  // Приоритет шаблона
 
     public  DbSms(long id, String titleSms, String textSms, String phoneNumber, int priority) {
         mId = id;
@@ -23,6 +25,7 @@ public class DbSms implements Serializable {
         mPhoneNumber = phoneNumber;
     }
 
+    @NotNull
     public static DbSms getEmptySms()
     {
         return new DbSms(EMPTY_ID, "", "", "", 0);

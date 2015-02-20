@@ -19,10 +19,12 @@ import com.production.kriate.allsms.fragments.AboutSmsFragment;
 import com.production.kriate.allsms.fragments.CategorySmsFragment;
 import com.production.kriate.allsms.fragments.PageSmsFragment;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+
+@SuppressWarnings("deprecation")
 public class ActivitySingle extends ActionBarActivity {
-
-    private final int START_PAGE = 0;
 
     private String[] mScreenTitles;
     private DrawerLayout mDrawerLayout;
@@ -34,7 +36,7 @@ public class ActivitySingle extends ActionBarActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_activity);
@@ -44,7 +46,7 @@ public class ActivitySingle extends ActionBarActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mScreenTitles));
+        mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, mScreenTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,7 +86,7 @@ public class ActivitySingle extends ActionBarActivity {
         return super.onCreateOptionsMenu(menu);
     }
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(@NotNull Menu menu) {
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
         menu.findItem(R.id.menu_item_new_template).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
@@ -109,6 +111,7 @@ public class ActivitySingle extends ActionBarActivity {
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            int START_PAGE = 0;
             selectItem(position, START_PAGE);
         }
     }

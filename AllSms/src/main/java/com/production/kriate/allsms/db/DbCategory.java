@@ -1,5 +1,7 @@
 package com.production.kriate.allsms.db;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -10,9 +12,9 @@ import java.util.ArrayList;
 public class DbCategory implements Serializable {
     public static final long EMPTY_ID = -1;
 
-    private long mId;       // Идентификатор категории в базе
-    private String mName;  // Название категории
-    private ArrayList<DbSms> mListSms; //Список шаблонов категории
+    private final long mId;       // Идентификатор категории в базе
+    private final String mName;  // Название категории
+    private final ArrayList<DbSms> mListSms; //Список шаблонов категории
 
     public DbCategory(long id, String name, ArrayList<DbSms> listSms){
         mId = id;
@@ -20,6 +22,7 @@ public class DbCategory implements Serializable {
         mListSms = listSms;
     }
 
+    @Nullable
     public static DbCategory getEmptyCategory() {
         return new DbCategory(EMPTY_ID, "",  null);
     }

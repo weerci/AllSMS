@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -13,6 +15,7 @@ import java.util.ArrayList;
  * Created by dima on 28.01.2015.
  * Реализует взаимодействие с таблицей sms
  */
+@SuppressWarnings("ALL")
 public class DbConnector {
 
     private static SQLiteDatabase mDataBase;
@@ -22,16 +25,18 @@ public class DbConnector {
         OpenHelper mOpenHelper = new OpenHelper(context);
         mDataBase = mOpenHelper.getWritableDatabase();
     }
-    public static DbConnector newInstance(Context c){
+    public static DbConnector newInstance(@NotNull Context c){
         if (sDbConnector == null) {
             sDbConnector = new DbConnector(c.getApplicationContext());
         }
         return  sDbConnector;
     }
 
+    @NotNull
     public Sms getSms(){
         return new Sms();
     }
+    @NotNull
     public Category getCategory(){
         return new Category();
     }
@@ -59,7 +64,7 @@ public class DbConnector {
         }
 
         @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        public void onUpgrade(@NotNull SQLiteDatabase db, int oldVersion, int newVersion) {
             String query = "CREATE TABLE category (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)";
             db.execSQL(query);
 
@@ -73,7 +78,7 @@ public class DbConnector {
 
     // Реализует взаимодействие с таблицой sms
     public static class Sms{
-        public long insert(DbSms ds) {
+        public long insert(@NotNull DbSms ds) {
             ContentValues cv = new ContentValues();
             cv.put(TableSms.COLUMN_TITLE_SMS, ds.getTitleSms());
             cv.put(TableSms.COLUMN_TEXT_SMS, ds.getTextSms());
@@ -82,7 +87,7 @@ public class DbConnector {
 
             return mDataBase.insert(TableSms.TABLE_NAME, null, cv);
         }
-        public int update(DbSms ds) {
+        public int update(@NotNull DbSms ds) {
             ContentValues cv=new ContentValues();
             cv.put(TableSms.COLUMN_TITLE_SMS, ds.getTitleSms());
             cv.put(TableSms.COLUMN_TEXT_SMS, ds.getTextSms());
@@ -93,81 +98,100 @@ public class DbConnector {
         public void deleteOne(long id) {
             mDataBase.delete(TableSms.TABLE_NAME, TableSms.COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
         }
-        public void deleteArray(int[] ids) {
+        public void deleteArray(@NotNull int[] ids) {
             for (int i : ids){
                 deleteOne(i);
             }
         }
+        @NotNull
         public DbSms selectOne(long id) {
             Cursor mCursor = mDataBase.query(TableSms.TABLE_NAME, null, TableSms.COLUMN_ID + " = ?", new String[] { String.valueOf(id) }, null, null, TableSms.COLUMN_TITLE_SMS);
 
-            mCursor.moveToFirst();
-            if (!mCursor.isAfterLast()){
-                String titleSms  = mCursor.getString(TableSms.NUM_COLUMN_TITLE_SMS);
-                String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
-                String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
-                int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
+            try {
+                mCursor.moveToFirst();
+                if (!mCursor.isAfterLast()){
+                    String titleSms  = mCursor.getString(TableSms.NUM_COLUMN_TITLE_SMS);
+                    String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
+                    String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
+                    int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
 
-                return new DbSms(id, titleSms, textSms, phoneNumber, priority);
-            } else {
-                return DbSms.getEmptySms();
+                    return new DbSms(id, titleSms, textSms, phoneNumber, priority);
+                } else {
+                    return DbSms.getEmptySms();
+                }
+            } finally {
+                mCursor.close();
             }
         }
+        @NotNull
         public ArrayList<DbSms> selectAll(){
             Cursor mCursor = mDataBase.query(TableSms.TABLE_NAME, null, null, null, null, null, TableSms.COLUMN_TITLE_SMS);
+            ArrayList<DbSms> arr = new ArrayList<>();
 
-            ArrayList<DbSms> arr = new ArrayList<DbSms>();
-            mCursor.moveToFirst();
-            if (!mCursor.isAfterLast()) {
-                do {
-                    long id = mCursor.getLong(TableSms.NUM_COLUMN_ID);
-                    String titleSms = mCursor.getString(TableSms.NUM_COLUMN_TITLE_SMS);
-                    String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
-                    String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
-                    int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
-                    arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority));
-                } while (mCursor.moveToNext());
+            try {
+                mCursor.moveToFirst();
+                if (!mCursor.isAfterLast()) {
+                    do {
+                        long id = mCursor.getLong(TableSms.NUM_COLUMN_ID);
+                        String titleSms = mCursor.getString(TableSms.NUM_COLUMN_TITLE_SMS);
+                        String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
+                        String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
+                        int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
+                        arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority));
+                    } while (mCursor.moveToNext());
+                }
+            } finally {
+                mCursor.close();
             }
             return arr;
         }
+        @NotNull
         public ArrayList<DbSms> selectFavorite(){
             Cursor mCursor = mDataBase.query(TableSms.TABLE_NAME, null, TableSms.COLUMN_PRIORITY + " = ?", new String[]{"1"}, null, null, TableSms.COLUMN_TITLE_SMS);
+            ArrayList<DbSms> arr = new ArrayList<>();
 
-            ArrayList<DbSms> arr = new ArrayList<DbSms>();
-            mCursor.moveToFirst();
-            if (!mCursor.isAfterLast()) {
-                do {
-                    long id = mCursor.getLong(TableSms.NUM_COLUMN_ID);
-                    String titleSms = mCursor.getString(TableSms.NUM_COLUMN_TITLE_SMS);
-                    String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
-                    String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
-                    int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
-                    arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority));
-                } while (mCursor.moveToNext());
+            try {
+                mCursor.moveToFirst();
+                if (!mCursor.isAfterLast()) {
+                    do {
+                        long id = mCursor.getLong(TableSms.NUM_COLUMN_ID);
+                        String titleSms = mCursor.getString(TableSms.NUM_COLUMN_TITLE_SMS);
+                        String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
+                        String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
+                        int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
+                        arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority));
+                    } while (mCursor.moveToNext());
+                }
+            } finally {
+                mCursor.close();
             }
             return arr;
         }
+        @NotNull
         public ArrayList<DbSms> selectOther(){
             Cursor mCursor = mDataBase.query(TableSms.TABLE_NAME, null, TableSms.COLUMN_PRIORITY + " = ?", new String[]{"0"}, null, null, TableSms.COLUMN_TITLE_SMS);
-
-            ArrayList<DbSms> arr = new ArrayList<DbSms>();
-            mCursor.moveToFirst();
-            if (!mCursor.isAfterLast()) {
-                do {
-                    long id = mCursor.getLong(TableSms.NUM_COLUMN_ID);
-                    String titleSms = mCursor.getString(TableSms.NUM_COLUMN_TITLE_SMS);
-                    String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
-                    String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
-                    int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
-                    arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority));
-                } while (mCursor.moveToNext());
+            ArrayList<DbSms> arr = new ArrayList<>();
+            try {
+                mCursor.moveToFirst();
+                if (!mCursor.isAfterLast()) {
+                    do {
+                        long id = mCursor.getLong(TableSms.NUM_COLUMN_ID);
+                        String titleSms = mCursor.getString(TableSms.NUM_COLUMN_TITLE_SMS);
+                        String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
+                        String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
+                        int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
+                        arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority));
+                    } while (mCursor.moveToNext());
+                }
+            } finally {
+                mCursor.close();
             }
             return arr;
         }
     }
     // Реализует взаимодействие с таблицей category
     public static class Category{
-        public long insert(DbCategory dc){
+        public long insert(@NotNull DbCategory dc){
             ContentValues cv = new ContentValues();
             cv.put(TableCategory.COLUMN_NAME, dc.getName());
             mDataBase.beginTransaction();
@@ -184,7 +208,7 @@ public class DbConnector {
 
             return result;
         }
-        public int update(DbCategory dc){
+        public int update(@NotNull DbCategory dc){
             ContentValues cv=new ContentValues();
             cv.put(TableCategory.COLUMN_NAME, dc.getName());
             mDataBase.beginTransaction();
@@ -200,9 +224,9 @@ public class DbConnector {
             }
             return result;
         }
-        private void addSms(ArrayList<DbSms> dbSmses, long id_category){
+        private void addSms(@NotNull ArrayList<DbSms> dbSms, long id_category){
             mDataBase.delete(TableSmsCategory.TABLE_NAME, TableSmsCategory.COLUMN_ID_CATEGORY + " = ?", new String[]{String.valueOf(id_category)});
-            for (DbSms i : dbSmses) {
+            for (DbSms i : dbSms) {
                 mDataBase.execSQL("insert into "+TableSmsCategory.TABLE_NAME + "("+TableSmsCategory.COLUMN_ID_CATEGORY+", "+TableSmsCategory.COLUMN_ID_SMS+
                         ") values("+String.valueOf(id_category)+", "+String.valueOf(i.getId())+")");
             }
@@ -211,38 +235,45 @@ public class DbConnector {
         public void deleteOne(long id){
             mDataBase.delete(TableCategory.TABLE_NAME, TableCategory.COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
         }
-        public void deleteArray(int[] ids){
+        public void deleteArray(@NotNull int[] ids){
             for (int i : ids) {
                 deleteOne(i);
             }
         }
+        @Nullable
         public DbCategory selectOne(long id){
             Cursor mCursor = mDataBase.query(TableCategory.TABLE_NAME, null, TableCategory.COLUMN_ID + " = ?", new String[] { String.valueOf(id) },
                     null, null, TableCategory.COLUMN_NAME);
 
-            mCursor.moveToFirst();
-            if (!mCursor.isAfterLast()){
-                String name  = mCursor.getString(TableCategory.NUM_COLUMN_NAME);
-                return new DbCategory(id, name, null);
-            } else {
-                return DbCategory.getEmptyCategory();
+            try {
+                mCursor.moveToFirst();
+                if (!mCursor.isAfterLast()){
+                    String name  = mCursor.getString(TableCategory.NUM_COLUMN_NAME);
+                    return new DbCategory(id, name, null);
+                } else {
+                    return DbCategory.getEmptyCategory();
+                }
+            } finally {
+                mCursor.close();
             }
-
         }
+        @NotNull
         public ArrayList<DbCategory> selectAll(){
             Cursor mCursor = mDataBase.query(TableCategory.TABLE_NAME, null, null, null, null, null, TableCategory.COLUMN_NAME);
-
-            ArrayList<DbCategory> arr = new ArrayList<DbCategory>();
-            mCursor.moveToFirst();
-            if (!mCursor.isAfterLast()) {
-                do {
-                    long id = mCursor.getLong(TableCategory.NUM_COLUMN_ID);
-                    String name = mCursor.getString(TableCategory.NUM_COLUMN_NAME);
-                    arr.add(new DbCategory(id, name, null));
-                } while (mCursor.moveToNext());
+            ArrayList<DbCategory> arr = new ArrayList<>();
+            try {
+                mCursor.moveToFirst();
+                if (!mCursor.isAfterLast()) {
+                    do {
+                        long id = mCursor.getLong(TableCategory.NUM_COLUMN_ID);
+                        String name = mCursor.getString(TableCategory.NUM_COLUMN_NAME);
+                        arr.add(new DbCategory(id, name, null));
+                    } while (mCursor.moveToNext());
+                }
+            } finally {
+                mCursor.close();
             }
             return arr;
-
         }
         public long addSms(long id_sms, long id_category){
             ContentValues cv = new ContentValues();
@@ -255,6 +286,7 @@ public class DbConnector {
             mDataBase.delete(TableSmsCategory.TABLE_NAME, TableSmsCategory.COLUMN_ID_SMS +
                     " = ? AND " + TableSmsCategory.COLUMN_ID_CATEGORY + " = ?", new String[] { String.valueOf(id_sms), String.valueOf(id_category) });
         }
+        @NotNull
         public ArrayList<DbSms> getSelectedSms(long idCategory){
             String queryText = String.format("select s.%1$s, s.%2$s, s.%3$s, s.%4$s, s.%5$s from sms s left join sms_category sc on sc.id_sms = s.id where sc.id_category = %6$s",
                     TableSms.COLUMN_ID,
@@ -263,23 +295,26 @@ public class DbConnector {
                     TableSms.COLUMN_PHONE_NUMBER,
                     TableSms.COLUMN_PRIORITY,
                     idCategory);
-            Log.i("Text query = ", queryText);
             Cursor mCursor = mDataBase.rawQuery(queryText, new String [] {});
-
             ArrayList<DbSms> arr = new ArrayList<>();
-            mCursor.moveToFirst();
-            if (!mCursor.isAfterLast()) {
-                do {
-                    long id = mCursor.getLong(TableSms.NUM_COLUMN_ID);
-                    String titleSms = mCursor.getString(TableSms.NUM_COLUMN_TITLE_SMS);
-                    String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
-                    String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
-                    int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
-                    arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority));
-                } while (mCursor.moveToNext());
+            try {
+                mCursor.moveToFirst();
+                if (!mCursor.isAfterLast()) {
+                    do {
+                        long id = mCursor.getLong(TableSms.NUM_COLUMN_ID);
+                        String titleSms = mCursor.getString(TableSms.NUM_COLUMN_TITLE_SMS);
+                        String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
+                        String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
+                        int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
+                        arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority));
+                    } while (mCursor.moveToNext());
+                }
+            } finally {
+                mCursor.close();
             }
             return arr;
         }
+        @NotNull
         public ArrayList<DbSms> getAvailableSms(long idCategory){
             String queryText = String.format("select s.%1$s, s.%2$s, s.%3$s, s.%4$s, s.%5$s  from sms s where s.id not in (select sc.id_sms from sms_category sc WHERE sc.id_category = %6$s)",
                     TableSms.COLUMN_ID,
@@ -290,20 +325,22 @@ public class DbConnector {
                     idCategory);
 
             Cursor mCursor = mDataBase.rawQuery(queryText, new String [] {});
-
             ArrayList<DbSms> arr = new ArrayList<>();
-            mCursor.moveToFirst();
-            if (!mCursor.isAfterLast()) {
-                do {
-                    long id = mCursor.getLong(TableSms.NUM_COLUMN_ID);
-                    String titleSms = mCursor.getString(TableSms.NUM_COLUMN_TITLE_SMS);
-                    String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
-                    String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
-                    int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
-                    arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority));
-                } while (mCursor.moveToNext());
+            try {
+                mCursor.moveToFirst();
+                if (!mCursor.isAfterLast()) {
+                    do {
+                        long id = mCursor.getLong(TableSms.NUM_COLUMN_ID);
+                        String titleSms = mCursor.getString(TableSms.NUM_COLUMN_TITLE_SMS);
+                        String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
+                        String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
+                        int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
+                        arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority));
+                    } while (mCursor.moveToNext());
+                }
+            } finally {
+                mCursor.close();
             }
-            Log.i("Count of items =", String.valueOf(arr.size()));
             return arr;
         }
 
@@ -350,6 +387,6 @@ public class DbConnector {
 
         // Номера столбцов
         private static final int NUM_COLUMN_ID_SMS = 0;
-        private static final int NUM_COLUMN_ID_CATEGROY = 1;
+        private static final int NUM_COLUMN_ID_CATEGORY = 1;
     }
 }

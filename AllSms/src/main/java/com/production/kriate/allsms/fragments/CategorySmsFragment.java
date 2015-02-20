@@ -1,7 +1,6 @@
 package com.production.kriate.allsms.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,15 +19,17 @@ import com.production.kriate.allsms.R;
 import com.production.kriate.allsms.db.DbCategory;
 import com.production.kriate.allsms.db.DbConnector;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 
 public class CategorySmsFragment extends Fragment{
-    public static final int CATEGORY_UPDATE = 0;
-    public static final int CATEGORY_INSERT = 1;
-    private ListView mListView;
+    private static final int CATEGORY_UPDATE = 0;
+    private static final int CATEGORY_INSERT = 1;
     private CategoryListAdapter mCategoryListAdapter;
-    private ArrayList<DbCategory> mCategoryList;
 
+    @NotNull
     public static CategorySmsFragment newInstance(){
         return new CategorySmsFragment();
     }
@@ -38,21 +39,21 @@ public class CategorySmsFragment extends Fragment{
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        mCategoryList = DbConnector.newInstance(getActivity()).getCategory().selectAll();
-        mCategoryListAdapter = new CategoryListAdapter(getActivity(), mCategoryList);
+        ArrayList<DbCategory> categoryList = DbConnector.newInstance(getActivity()).getCategory().selectAll();
+        mCategoryListAdapter = new CategoryListAdapter(categoryList);
     }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.category_sms, container, false);
-        mListView = (ListView)v.findViewById(R.id.list_view_category);
-        mListView.setAdapter(mCategoryListAdapter);
-        registerForContextMenu(mListView);
+        ListView listView = (ListView) v.findViewById(R.id.list_view_category);
+        listView.setAdapter(mCategoryListAdapter);
+        registerForContextMenu(listView);
 
         return v;
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_item_new_template:
                 Intent i = new Intent(getActivity(), EditCategoryActivity.class);
@@ -68,7 +69,7 @@ public class CategorySmsFragment extends Fragment{
         getActivity().getMenuInflater().inflate(R.menu.sms_list_item_context, menu);
     }
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(@NotNull MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int position = info.position;
 
@@ -87,7 +88,7 @@ public class CategorySmsFragment extends Fragment{
         return super.onContextItemSelected(item);
     }
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @NotNull Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             DbCategory dbCategory = (DbCategory) data.getExtras().getSerializable(EditCategoryFragment.EXTRA_CATEGORY);
             switch (requestCode) {
@@ -105,19 +106,17 @@ public class CategorySmsFragment extends Fragment{
 
     }
     private void updateList () {
-        mCategoryListAdapter.setArrayDbContayner(DbConnector.newInstance(getActivity()).getCategory().selectAll());
+        mCategoryListAdapter.setArrayDbContainer(DbConnector.newInstance(getActivity()).getCategory().selectAll());
         mCategoryListAdapter.notifyDataSetChanged();
     }
 
     private class CategoryListAdapter extends BaseAdapter{
-        private LayoutInflater mLayoutInflater;
         private ArrayList<DbCategory> arrayDbCategory;
 
-        public CategoryListAdapter (Context ctx, ArrayList<DbCategory> arr) {
-            mLayoutInflater = LayoutInflater.from(ctx);
-            setArrayDbContayner(arr);
+        public CategoryListAdapter (ArrayList<DbCategory> arr) {
+            setArrayDbContainer(arr);
         }
-        public void setArrayDbContayner(ArrayList<DbCategory> arrayDbCategory) {
+        public void setArrayDbContainer(ArrayList<DbCategory> arrayDbCategory) {
             this.arrayDbCategory = arrayDbCategory;
         }
         public int getCount () {
@@ -134,7 +133,8 @@ public class CategorySmsFragment extends Fragment{
             }
             return 0;
         }
-        public View getView(int position, View convertView, ViewGroup parent) {
+        @Nullable
+        public View getView(int position, @Nullable View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.category_list_item, null);
             }

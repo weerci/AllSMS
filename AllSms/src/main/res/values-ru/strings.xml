@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="sms_send_success">Сообщение отправлено!</string>
     <string name="sms_send_failed">Сообщение не отправлено, попробуйте позже!</string>
-
-
     <string name="sms_add_template">Новый шаблон</string>
     <string name="sms_delete_template">Удалить</string>
     <string name="sms_edit_template">Редактировать</string>
+    <string name="image_content_plane">Sms как самолет</string>
 
     <!-- Редактирование шаблона -->
     <string name="header_template_editor">Редактирование шаблона</string>
@@ -23,13 +22,13 @@
     <string name="cancel">Отмена</string>
 
     <!--Редактирование категории-->
-    <string name="header_category_editor">Редактирование шаблона</string>
+    <string name="header_category_editor">Редактирование катерогии</string>
     <string name="category_name_label">Имя категории</string>
     <string name="category_name_hint">Введите имя категории</string>
     <string name="category_sms_selected">Выбранные</string>
     <string name="category_sms_available">Досупные</string>
     <string name="category_add_sms">Добавить выбранный шаблон в категорию?</string>
-    <string name="categroy_remove_sms">Удалить выбранный шаблон из категории?</string>
+    <string name="categroy_remove_sms" tools:ignore="ExtraTranslation">Удалить выбранный шаблон из категории?</string>
     <string name="category_add_title">Добавить шаблон</string>
     <string name="category_remove_title">Удалить шаблон</string>
 
@@ -56,6 +55,7 @@
     <string name="phone_prefix">тел. </string>
 
     <string name="about_string_1">Приложение «СМС одним тапом»</string>
-    <string name="about_string_2">Поддерживаемые ОС: Android\nВерсия: 1.9\nРазработчик: ООО «Криэйт» (г.Красноярск)\ne-mail: balu@kriate.ru\nтел.: (391) 215-44-30</string>
+    <string name="about_string_2">Поддерживаемые ОС: Android\nВерсия: 2.0\nРазработчик: ООО «Криэйт»
+        (г.Красноярск)\ne–mail: balu@kriate.ru\nтел.: (391) 215-44-30</string>
 
 </resources>

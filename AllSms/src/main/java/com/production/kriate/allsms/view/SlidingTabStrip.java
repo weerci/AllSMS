@@ -28,39 +28,45 @@ package com.production.kriate.allsms.view;
     import android.widget.LinearLayout;
     import com.production.kriate.allsms.R.color;
 
+    import org.jetbrains.annotations.NotNull;
+    import org.jetbrains.annotations.Nullable;
+
+@SuppressWarnings("ALL")
 class SlidingTabStrip extends LinearLayout {
 
     private static final int DEFAULT_BOTTOM_BORDER_THICKNESS_DIPS = 2;
     private static final byte DEFAULT_BOTTOM_BORDER_COLOR_ALPHA = 0x26;
     private static final int SELECTED_INDICATOR_THICKNESS_DIPS = 4;
-    private int DEFAULT_SELECTED_INDICATOR_COLOR = getResources().getColor(color.sms_green);
 
     private static final int DEFAULT_DIVIDER_THICKNESS_DIPS = 1;
     private static final byte DEFAULT_DIVIDER_COLOR_ALPHA = 0x20;
     private static final float DEFAULT_DIVIDER_HEIGHT = 0.5f;
 
     private final int mBottomBorderThickness;
+    @NotNull
     private final Paint mBottomBorderPaint;
 
     private final int mSelectedIndicatorThickness;
+    @NotNull
     private final Paint mSelectedIndicatorPaint;
 
-    private final int mDefaultBottomBorderColor;
-
+    @NotNull
     private final Paint mDividerPaint;
     private final float mDividerHeight;
 
     private int mSelectedPosition;
     private float mSelectionOffset;
 
+    @Nullable
     private SlidingTabLayout.TabColorizer mCustomTabColorizer;
+    @NotNull
     private final SimpleTabColorizer mDefaultTabColorizer;
 
-    SlidingTabStrip(Context context) {
+    SlidingTabStrip(@NotNull Context context) {
         this(context, null);
         //super.setBackgroundColor (com.production.kriate.allsms.R.drawable.background_activated);
     }
-    SlidingTabStrip(Context context, AttributeSet attrs) {
+    private SlidingTabStrip(@NotNull Context context, AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
 
@@ -70,17 +76,18 @@ class SlidingTabStrip extends LinearLayout {
         context.getTheme().resolveAttribute(R.attr.colorForeground, outValue, true);
         final int themeForegroundColor =  outValue.data;
 
-        mDefaultBottomBorderColor = setColorAlpha(themeForegroundColor,
+        int defaultBottomBorderColor = setColorAlpha(themeForegroundColor,
                 DEFAULT_BOTTOM_BORDER_COLOR_ALPHA);
 
         mDefaultTabColorizer = new SimpleTabColorizer();
+        int DEFAULT_SELECTED_INDICATOR_COLOR = getResources().getColor(color.sms_green);
         mDefaultTabColorizer.setIndicatorColors(DEFAULT_SELECTED_INDICATOR_COLOR);
         mDefaultTabColorizer.setDividerColors(setColorAlpha(themeForegroundColor,
                 DEFAULT_DIVIDER_COLOR_ALPHA));
 
         mBottomBorderThickness = (int) (DEFAULT_BOTTOM_BORDER_THICKNESS_DIPS * density);
         mBottomBorderPaint = new Paint();
-        mBottomBorderPaint.setColor(mDefaultBottomBorderColor);
+        mBottomBorderPaint.setColor(defaultBottomBorderColor);
 
         mSelectedIndicatorThickness = (int) (SELECTED_INDICATOR_THICKNESS_DIPS * density);
         mSelectedIndicatorPaint = new Paint();
@@ -90,9 +97,7 @@ class SlidingTabStrip extends LinearLayout {
         mDividerPaint.setStrokeWidth((int) (DEFAULT_DIVIDER_THICKNESS_DIPS * density));
     }
 
-
-
-    void setCustomTabColorizer(SlidingTabLayout.TabColorizer customTabColorizer) {
+    void setCustomTabColorizer(@Nullable SlidingTabLayout.TabColorizer customTabColorizer) {
         mCustomTabColorizer = customTabColorizer;
         invalidate();
     }
@@ -118,7 +123,7 @@ class SlidingTabStrip extends LinearLayout {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NotNull Canvas canvas) {
         final int height = getHeight();
         final int childCount = getChildCount();
         final int dividerHeightPx = (int) (Math.min(Math.max(0f, mDividerHeight), 1f) * height);

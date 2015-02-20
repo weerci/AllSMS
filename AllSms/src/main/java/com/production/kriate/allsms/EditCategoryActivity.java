@@ -7,18 +7,22 @@ import android.support.v4.app.FragmentManager;
 import com.production.kriate.allsms.db.DbCategory;
 import com.production.kriate.allsms.fragments.EditCategoryFragment;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Активность вызова фрагмента создания/редактирования категорий
  */
 public class EditCategoryActivity extends ActivitySingle {
 
-    protected Fragment createFragment() {
+    @NotNull
+    Fragment createFragment() {
         getIntent().hasExtra(EditCategoryFragment.EXTRA_CATEGORY);
         DbCategory category = (DbCategory) getIntent().getSerializableExtra(EditCategoryFragment.EXTRA_CATEGORY);
         return EditCategoryFragment.newInstance(category);
     }
 
-    protected int getLayoutResId() {
+    @SuppressWarnings("SameReturnValue")
+    int getLayoutResId() {
         return R.layout.main_activity;
     }
 

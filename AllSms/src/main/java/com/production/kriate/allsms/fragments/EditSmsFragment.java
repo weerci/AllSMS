@@ -18,15 +18,17 @@ import android.widget.EditText;
 import com.production.kriate.allsms.R;
 import com.production.kriate.allsms.db.DbSms;
 
+import org.jetbrains.annotations.NotNull;
+
 public class EditSmsFragment extends Fragment {
     public static final String EXTRA_SMS = "com.production.kriate.allsms.EditSmsFragment.EXTRA_SMS";
     private static final int REQUEST_CONTACT = 0;
     private DbSms mSms;
     private EditText mTitleField, mTextField, mPhoneField;
     private CheckBox mIsFavorite;
-    private Button mSaveButton, mCancelButton, mSelectPhoneButton;
     private long mId;
 
+    @NotNull
     public static EditSmsFragment newInstance(DbSms ds) {
         EditSmsFragment fragment = new EditSmsFragment();
         fragment.setSms(ds);
@@ -37,7 +39,7 @@ public class EditSmsFragment extends Fragment {
     {
         return mIsFavorite.isChecked()? 1 : 0;
     }
-    public void setSms(DbSms ds)
+    void setSms(DbSms ds)
     {
         mSms = ds;
     }
@@ -48,11 +50,11 @@ public class EditSmsFragment extends Fragment {
         setHasOptionsMenu(true);
     }
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(@NotNull Menu menu) {
         menu.findItem(R.id.menu_item_new_template).setVisible(false);
     }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.sms_fragment, container, false);
 
         mTitleField = (EditText) v.findViewById(R.id.sms_title_edit_text);
@@ -70,9 +72,9 @@ public class EditSmsFragment extends Fragment {
         }
 
         // Кнопки
-        mSaveButton = (Button) v.findViewById(R.id.butSave);
-        mCancelButton = (Button) v.findViewById(R.id.butCancel);
-        mSaveButton.setOnClickListener( new View.OnClickListener() {
+        Button saveButton = (Button) v.findViewById(R.id.butSave);
+        Button cancelButton = (Button) v.findViewById(R.id.butCancel);
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DbSms dbSms = new DbSms(mId, mTitleField.getText().toString(), mTextField.getText().toString(),
@@ -83,14 +85,14 @@ public class EditSmsFragment extends Fragment {
                 getActivity().finish();
             }
         });
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
-        mSelectPhoneButton = (Button)v.findViewById(R.id.select_phone_button);
-        mSelectPhoneButton.setOnClickListener(new View.OnClickListener() {
+        Button selectPhoneButton = (Button) v.findViewById(R.id.select_phone_button);
+        selectPhoneButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
                 startActivityForResult(i, REQUEST_CONTACT);
@@ -100,7 +102,7 @@ public class EditSmsFragment extends Fragment {
         return v;
     }
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @NotNull Intent data) {
         if (resultCode != Activity.RESULT_OK) return;
         if (requestCode == REQUEST_CONTACT) {
             Uri contactUri = data.getData();

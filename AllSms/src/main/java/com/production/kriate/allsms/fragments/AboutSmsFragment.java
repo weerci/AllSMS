@@ -9,8 +9,11 @@ import android.view.ViewGroup;
 
 import com.production.kriate.allsms.R;
 
+import org.jetbrains.annotations.NotNull;
+
 public class AboutSmsFragment extends Fragment {
 
+    @NotNull
     public static AboutSmsFragment newInstance(){
         return new AboutSmsFragment();
     }
@@ -22,15 +25,12 @@ public class AboutSmsFragment extends Fragment {
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(@NotNull Menu menu) {
         menu.findItem(R.id.menu_item_new_template).setVisible(false);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.about_sms, container, false);
-
-        return rootView;
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.about_sms, container, false);
     }
 }

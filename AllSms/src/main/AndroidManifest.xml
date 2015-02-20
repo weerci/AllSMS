@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.production.kriate.allsms"
-    android:versionCode="2"
-    android:versionName="1.9">
-
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="21"/>
+          xmlns:tools="http://schemas.android.com/tools"
+    package="com.production.kriate.allsms" tools:ignore="UnusedAttribute">
 
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
@@ -23,6 +18,10 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".EditCategoryActivity"
+            android:label="@string/header_template_editor" >
         </activity>
         <activity
             android:name=".EditSmsActivity"

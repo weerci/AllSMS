@@ -6,9 +6,11 @@ import android.widget.Toast;
 
 import com.production.kriate.allsms.db.DbSms;
 
+import org.jetbrains.annotations.NotNull;
+
 /*Класс инкапсулирует работу по отправке SMS*/
 public class SmsSend {
-    public static void Send(Context context, DbSms ds){
+    public static void Send(@NotNull Context context, @NotNull DbSms ds){
         try {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(ds.getPhoneNumber(), null, ds.getTextSms(), null, null);

@@ -18,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@drawable/row_default"
+        android:contentDescription="@string/favorite_template_label"
         />
 
     <LinearLayout
@@ -35,7 +36,6 @@
 
         <TextView
             android:id="@+id/sms_list_item_text_text_view"
-            android:layout_below="@id/sms_list_item_title_text_view"
             style="@style/sms_list_item"
             tools:text="Sms text, very, very big. And only big"/>
         <TextView

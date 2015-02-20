@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="sms_send_success">SMS Sent!</string>
     <string name="sms_send_failed">SMS failed, please try again later!</string>
-
-
     <string name="sms_add_template">New template</string>
     <string name="sms_delete_template">Delete</string>
     <string name="sms_edit_template">Edit</string>
+    <string name="image_content_plane">Sms how plane</string>
 
     <!-- Редактирование шаблона -->
-    <string name="header_template_editor">Edit of templater</string>
+    <string name="header_template_editor">Edit of template</string>
     <string name="title_template_label">Title template</string>
     <string name="template_title_hint">Type a title for the template.</string>
     <string name="text_template_label">Text template</string>
@@ -23,13 +22,13 @@
     <string name="cancel">Cancel</string>
 
     <!--Редактирование категории-->
-    <string name="header_category_editor">Edit of templater</string>
+    <string name="header_category_editor">Edit of categroy</string>
     <string name="category_name_label">Name category</string>
     <string name="category_name_hint">Type a name of category.</string>
     <string name="category_sms_selected">Selected</string>
     <string name="category_sms_available">Available</string>
     <string name="category_add_sms">Add selected sms-template to category?</string>
-    <string name="categroy_remove_sms">Remove selected sms-template from category?</string>
+    <string name="category_remove_sms" tools:ignore="MissingTranslation">Remove selected sms-template from category?</string>
     <string name="category_add_title">Add template</string>
     <string name="category_remove_title">Remove template</string>
 
@@ -55,6 +54,7 @@
     <string name="phone_prefix">tel. </string>
 
     <string name="about_string_1">"All Sms by one tap"</string>
-    <string name="about_string_2">Supported OS: Android\nVersion: 1.9\nDeveloper: OOO «Kriate» (Krasnoyars city, Russian federation)\ne-mail: balu@kriate.ru\nтел.: (391) 215-44-30</string>
+    <string name="about_string_2">Supported OS: Android\nVersion: 2.0\nDeveloper: OOO «Kriate»
+        (Krasnoyars city, Russian federation)\ne–mail: balu@kriate.ru\nтел.: (391) 215-44-30</string>
 
 </resources>
