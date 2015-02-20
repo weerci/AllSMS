@@ -16,8 +16,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.production.kriate.allsms.fragments.AboutSmsFragment;
+import com.production.kriate.allsms.fragments.CategorySmsFragment;
 import com.production.kriate.allsms.fragments.PageSmsFragment;
-import com.production.kriate.allsms.fragments.SettingSmsFragment;
 
 
 public class ActivitySingle extends ActionBarActivity {
@@ -119,7 +119,7 @@ public class ActivitySingle extends ActionBarActivity {
                 fragment = PageSmsFragment.newInstance(indexPage);
                 break;
             case 1:
-                fragment = SettingSmsFragment.newInstance();
+                fragment = CategorySmsFragment.newInstance();
                 break;
             case 2:
                 fragment = AboutSmsFragment.newInstance();

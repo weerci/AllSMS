@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/background_activated"
+              android:descendantFocusability="blocksDescendants"
+              android:orientation="horizontal">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:background="@color/sms_green">
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/sms_list_img_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/row_default"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/sms_list_item_title_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            tools:text="Sms title"/>
+
+        <TextView
+            android:id="@+id/sms_list_item_text_text_view"
+            android:layout_below="@id/sms_list_item_title_text_view"
+            style="@style/sms_list_item"
+            tools:text="Sms text, very, very big. And only big"/>
+        <TextView
+            android:id="@+id/sms_list_item_phone_text_view"
+            tools:text="8-903-933-09-34"
+            style="@style/sms_list_item.text_list_phone"
+            />
+    </LinearLayout>
+</LinearLayout>

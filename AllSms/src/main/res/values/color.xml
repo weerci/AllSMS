@@ -2,5 +2,6 @@
 <resources>
 
     <item name="sms_green" type="color">#FF40B320</item>
+    <item name="sms_list_start" type="color">#FFD8F1CD</item>
 
 </resources>

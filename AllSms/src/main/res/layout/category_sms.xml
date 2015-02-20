@@ -5,9 +5,9 @@
               android:gravity="center"
               android:orientation="vertical" >
 
-    <ListView android:id="@+id/list_view_sms"
+    <ListView android:id="@+id/list_view_category"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-        />
+              />
 
 </LinearLayout>

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -26,9 +27,6 @@ public class EditSmsFragment extends Fragment {
     private Button mSaveButton, mCancelButton, mSelectPhoneButton;
     private long mId;
 
-    public static EditSmsFragment newInstance(){
-        return new EditSmsFragment();
-    }
     public static EditSmsFragment newInstance(DbSms ds) {
         EditSmsFragment fragment = new EditSmsFragment();
         fragment.setSms(ds);
@@ -44,6 +42,15 @@ public class EditSmsFragment extends Fragment {
         mSms = ds;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.menu_item_new_template).setVisible(false);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.sms_fragment, container, false);

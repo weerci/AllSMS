@@ -4,25 +4,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.production.kriate.allsms.ActivitySingle;
-import com.production.kriate.allsms.EditSmsActivity;
 import com.production.kriate.allsms.R;
-import com.production.kriate.allsms.SmsSend;
 import com.production.kriate.allsms.db.DbCategory;
 import com.production.kriate.allsms.db.DbConnector;
 import com.production.kriate.allsms.db.DbSms;
@@ -30,20 +29,27 @@ import com.production.kriate.allsms.view.SlidingTabLayout;
 
 import java.util.ArrayList;
 
-public class PageSmsFragment extends Fragment {
-    public static final int SMS_UPDATE = 0;
-    public static final int SMS_INSERT = 1;
-    private final int REQUEST_SEND_SMS = 3;
-    public static final String DIALOG_SEND_SMS = "send_sms";
-    public final static String CURRENT_PAGE_ID = "com.production.kriate.allsms.current_page_id";
+/**
+ * Реализует создание/редактирование категорий
+ */
+public class EditCategoryFragment extends Fragment {
+    public final static String EXTRA_CATEGORY = "com.production.kriate.allsms.EditCategoryFragment.db_category";
+    public final static String DIALOG_ADD_REMOVE_CATEGORY_TO_SMS = "add_remove_category";
+    private ArrayList<DbSms> mSelectedSms;
+    private ArrayList<DbSms> mAvailableSms;
+
+
+    private Button mSaveButton, mCancelButton;
+    private EditText mNameField;
+    private long mIdCategory;
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
-    private ArrayList<DbCategory> mCategoryList;
+    private ListView mListView;
 
-    public static PageSmsFragment newInstance(int indexPage) {
+    public static EditCategoryFragment newInstance(DbCategory dc) {
         Bundle args = new Bundle();
-        args.putSerializable(CURRENT_PAGE_ID, indexPage);
-        PageSmsFragment fragment = new PageSmsFragment();
+        args.putSerializable(EXTRA_CATEGORY, dc);
+        EditCategoryFragment fragment = new EditCategoryFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,93 +58,81 @@ public class PageSmsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mCategoryList = new ArrayList<DbCategory>();
-        mCategoryList.add(new DbCategory(0, getResources().getString(R.string.action_all), null));
-        mCategoryList.add(new DbCategory(0, getResources().getString(R.string.action_favorite), null));
-        mCategoryList.addAll(DbConnector.newInstance(getActivity()).getCategory().selectAll());
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.page_sms, container, false);
-        return rootView;
+        View v = inflater.inflate(R.layout.categroy_fragment, container, false);
+
+        mNameField = (EditText) v.findViewById(R.id.category_name_edit_text);
+        mIdCategory = DbCategory.EMPTY_ID;
+
+        DbCategory dbCategory = (DbCategory)getArguments().getSerializable(EditCategoryFragment.EXTRA_CATEGORY);
+
+        if (dbCategory != null) {
+            mIdCategory = dbCategory.getId();
+            mNameField.setText(dbCategory.getName());
+        }
+        mSelectedSms = DbConnector.newInstance(getActivity()).getCategory().getSelectedSms(mIdCategory);
+        mAvailableSms = DbConnector.newInstance(getActivity()).getCategory().getAvailableSms(mIdCategory);
+
+        // Кнопки
+        mSaveButton = (Button) v.findViewById(R.id.categoryButtonSave);
+        mCancelButton = (Button) v.findViewById(R.id.categoryButtonCancel);
+        mSaveButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DbCategory dbCategory = new DbCategory(mIdCategory, mNameField.getText().toString(), mSelectedSms);
+                Intent intent = new Intent();
+                intent.putExtra(EXTRA_CATEGORY, dbCategory);
+                getActivity().setResult(Activity.RESULT_OK, intent);
+                getActivity().finish();
+
+            }
+        });
+        mCancelButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
+
+        return v;
     }
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new SamplePagerAdapter());
-        int currentPage = (int)getArguments().getSerializable(PageSmsFragment.CURRENT_PAGE_ID);
-        mViewPager.setCurrentItem(currentPage, true);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        mViewPager = (ViewPager) view.findViewById(R.id.category_viewpager);
+        mViewPager.setAdapter(new SmsPagerAdapter());
 
-        mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.category_sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.menu_item_new_template:
-                Intent i = new Intent(getActivity(), EditSmsActivity.class);
-                startActivityForResult(i, PageSmsFragment.SMS_INSERT);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getActivity().getMenuInflater().inflate(R.menu.sms_list_item_context, menu);
-    }
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        int position = info.position;
-        View v = (View)info.targetView.getParent();
-        ListView listView = (ListView)v.findViewById(R.id.list_view_sms);
-
-        ListAdapter adapter = (ListAdapter)listView.getAdapter();
-        DbSms dbSms = adapter.arrayDbSms.get(position);
-        switch (item.getItemId()) {
-            case R.id.menu_item_delete_template:
-                DbConnector.newInstance(getActivity()).getSms().deleteOne(dbSms.getId());
-                //updateList(adapter, mViewPager.getCurrentItem());
-                ((ActivitySingle)getActivity()).selectItem(0, mViewPager.getCurrentItem());
-                return true;
-            case R.id.menu_item_edit_template:
-                Intent i = new Intent(getActivity(), EditSmsActivity.class);
-                i.putExtra(EditSmsFragment.EXTRA_SMS, dbSms);
-                startActivityForResult(i, SMS_UPDATE);
-                return true;
-        }
-        return super.onContextItemSelected(item);
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.menu_item_new_template).setVisible(false);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            DbSms dbSms = (DbSms) data.getExtras().getSerializable(EditSmsFragment.EXTRA_SMS);
-            int indexPage = mViewPager.getCurrentItem();
+            DbSms dbSms = (DbSms)data.getSerializableExtra(AddCategoryFragment.EXTRA_SMS);
             switch (requestCode) {
-                case SMS_INSERT:
-                    DbConnector.newInstance(getActivity()).getSms().insert(dbSms);
-                    ((ActivitySingle)getActivity()).selectItem(0, indexPage);
-                    break;
-                case SMS_UPDATE:
-                    DbConnector.newInstance(getActivity()).getSms().update(dbSms);
-                    ((ActivitySingle)getActivity()).selectItem(0, indexPage);
-                    break;
-                case REQUEST_SEND_SMS:
-                    SmsSend.Send(getActivity(), dbSms);
+                case 1:
+                    mSelectedSms.remove(dbSms);
+                    mAvailableSms.add(dbSms);
                     break;
                 default:
+                    mAvailableSms.remove(dbSms);
+                    mSelectedSms.add(dbSms);
                     break;
             }
+            ((ListSmsAdapter)mListView.getAdapter()).notifyDataSetChanged();
         }
     }
 
-    private class SamplePagerAdapter extends PagerAdapter {
+    private class SmsPagerAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
-            return mCategoryList.size();
+            return 2;
         }
         @Override
         public int getItemPosition(Object object) {
@@ -150,40 +144,49 @@ public class PageSmsFragment extends Fragment {
         }
         @Override
         public CharSequence getPageTitle(int position) {
-            return mCategoryList.get(position).getName();
+            switch (position) {
+                case 1:
+                    return getResources().getString(R.string.category_sms_available);
+                default:
+                    return getResources().getString(R.string.category_sms_selected);
+            }
         }
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View v = getActivity().getLayoutInflater().inflate(R.layout.page_item, container, false);
             container.addView(v);
-            final ListView listView = (ListView)v.findViewById(R.id.list_view_sms);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            mListView = (ListView)v.findViewById(R.id.list_view_sms);
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    ListAdapter adapter = (ListAdapter)listView.getAdapter();
-                    DbSms dbSms = adapter.arrayDbSms.get(position);
-                    SmsSendFragment dialog = SmsSendFragment.newInstance(dbSms);
-                    dialog.setTargetFragment(PageSmsFragment.this, REQUEST_SEND_SMS);
-                    dialog.show(fm, DIALOG_SEND_SMS);
+                    mListView = (ListView)parent;
+                    ListSmsAdapter listSmsAdapter = (ListSmsAdapter)mListView.getAdapter();
+                    DbSms dbSms = listSmsAdapter.arrayDbSms.get(position);
+
+                    AddCategoryFragment addCategoryFragment;
+                    switch (mViewPager.getCurrentItem()) {
+                        case 1:
+                            addCategoryFragment = AddCategoryFragment.newInstance(dbSms);
+                            addCategoryFragment.setTargetFragment(EditCategoryFragment.this, AddCategoryFragment.ADD_SMS);
+                            break;
+                        default:
+                            addCategoryFragment = AddCategoryFragment.newInstance(dbSms);
+                            addCategoryFragment.setTargetFragment(EditCategoryFragment.this, AddCategoryFragment.REMOVE_SMS);
+                            break;
+                    }
+                    addCategoryFragment.show(fm, DIALOG_ADD_REMOVE_CATEGORY_TO_SMS);
                 }
             });
-            ArrayList<DbSms> smsList;
             switch (position) {
-                case 0:
-                    smsList = DbConnector.newInstance(getActivity()).getSms().selectAll();
-                    break;
                 case 1:
-                    smsList = DbConnector.newInstance(getActivity()).getSms().selectFavorite();
+                    mListView.setAdapter(new ListSmsAdapter(getActivity(), mAvailableSms));
                     break;
                 default:
-                    smsList = DbConnector.newInstance(getActivity()).getCategory().getSelectedSms(mCategoryList.get(position).getId());
+                    mListView.setAdapter(new ListSmsAdapter(getActivity(), mSelectedSms));
                     break;
             }
-
-            ListAdapter adapter = new ListAdapter(getActivity(), smsList);
-            listView.setAdapter(adapter);
-            registerForContextMenu(listView);
+            registerForContextMenu(mListView);
 
             return v;
         }
@@ -192,11 +195,11 @@ public class PageSmsFragment extends Fragment {
             container.removeView((View) object);
         }
     }
-    private class ListAdapter extends BaseAdapter {
+    private class ListSmsAdapter extends BaseAdapter {
         private LayoutInflater mLayoutInflater;
         private ArrayList<DbSms> arrayDbSms;
 
-        public ListAdapter (Context ctx, ArrayList<DbSms> arr) {
+        public ListSmsAdapter (Context ctx, ArrayList<DbSms> arr) {
             mLayoutInflater = LayoutInflater.from(ctx);
             setArrayDbSms(arr);
         }

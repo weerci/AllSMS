@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class DbSms implements Serializable {
     public static final long EMPTY_ID = -1;
 
-    private long mId;       // Идентификатор базы
+    private long mId;       // Идентификатор шаблона в базе
     private String mTitleSms;  // Название шаблона
     private String mTextSms;   // Текст отправляемый в SMS
     private String mPhoneNumber;    // Номер по которому отправляется SMS
@@ -31,19 +31,15 @@ public class DbSms implements Serializable {
     public long getId() {
         return mId;
     }
-
     public String getTitleSms() {
         return mTitleSms;
     }
-
     public String getTextSms() {
         return mTextSms;
     }
-
     public String getPhoneNumber() {
         return mPhoneNumber;
     }
-
     public int getPriority() {
         return mPriority;
     }

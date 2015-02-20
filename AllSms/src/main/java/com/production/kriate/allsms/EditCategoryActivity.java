@@ -3,18 +3,19 @@ package com.production.kriate.allsms;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import com.production.kriate.allsms.db.DbSms;
-import com.production.kriate.allsms.fragments.EditSmsFragment;
 
-/*Активность вызова фрагмента изменения шаблона SMS*/
-public class EditSmsActivity extends ActivitySingle{
+import com.production.kriate.allsms.db.DbCategory;
+import com.production.kriate.allsms.fragments.EditCategoryFragment;
+
+/**
+ * Активность вызова фрагмента создания/редактирования категорий
+ */
+public class EditCategoryActivity extends ActivitySingle {
 
     protected Fragment createFragment() {
-        if(getIntent().hasExtra(EditSmsFragment.EXTRA_SMS)) {
-            DbSms sms = (DbSms) getIntent().getSerializableExtra(EditSmsFragment.EXTRA_SMS);
-            return EditSmsFragment.newInstance(sms);
-        } else
-            return EditSmsFragment.newInstance(null);
+        getIntent().hasExtra(EditCategoryFragment.EXTRA_CATEGORY);
+        DbCategory category = (DbCategory) getIntent().getSerializableExtra(EditCategoryFragment.EXTRA_CATEGORY);
+        return EditCategoryFragment.newInstance(category);
     }
 
     protected int getLayoutResId() {

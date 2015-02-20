@@ -22,6 +22,17 @@
     <string name="save">Сохранить</string>
     <string name="cancel">Отмена</string>
 
+    <!--Редактирование категории-->
+    <string name="header_category_editor">Редактирование шаблона</string>
+    <string name="category_name_label">Имя категории</string>
+    <string name="category_name_hint">Введите имя категории</string>
+    <string name="category_sms_selected">Выбранные</string>
+    <string name="category_sms_available">Досупные</string>
+    <string name="category_add_sms">Добавить выбранный шаблон в категорию?</string>
+    <string name="categroy_remove_sms">Удалить выбранный шаблон из категории?</string>
+    <string name="category_add_title">Добавить шаблон</string>
+    <string name="category_remove_title">Удалить шаблон</string>
+
 
     <string name="sms_sender_title">Отправить сообщение?</string>
     <string name="sms_sender_text">Следующий текст \'%1$s\', будет отправлен на номер \'%2$s\'.</string>
@@ -36,7 +47,7 @@
 
     <string-array name="screen_array">
         <item>Все СМС</item>
-        <item>Настройки</item>
+        <item>Категории</item>
         <item>О программе</item>
     </string-array>
 
