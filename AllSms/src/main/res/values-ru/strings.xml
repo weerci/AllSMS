@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="sms_send_success">Сообщение отправлено!</string>
+    <string name="sms_send_failed">Сообщение не отправлено, попробуйте позже!</string>
+
+
+    <string name="sms_add_template">Новый шаблон</string>
+    <string name="sms_delete_template">Удалить</string>
+    <string name="sms_edit_template">Редактировать</string>
+
+    <!-- Редактирование шаблона -->
+    <string name="header_template_editor">Редактирование шаблона</string>
+    <string name="title_template_label">Название шаблона</string>
+    <string name="template_title_hint">Введите название шаблона</string>
+    <string name="text_template_label">Текст шаблона</string>
+    <string name="text_template_hint">Введите текст шаблона</string>
+    <string name="phone_template_label">Телефон получателя</string>
+    <string name="phone_template_hint">Введите телефонный номер</string>
+    <string name="favorite_template_label">Избранные</string>
+    <string name="select_phone_label">Выбрать</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
+
+
+    <string name="sms_sender_title">Отправить сообщение?</string>
+    <string name="sms_sender_text">Следующий текст \'%1$s\', будет отправлен на номер \'%2$s\'.</string>
+
+    <!-- actions-->
+    <string name="action_all">Все СМС</string>
+    <string name="action_search">Поиск</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_about">О программе</string>
+    <string name="action_favorite">Избранные</string>
+    <string name="action_other">Прочие</string>
+
+    <string-array name="screen_array">
+        <item>Все СМС</item>
+        <item>Настройки</item>
+        <item>О программе</item>
+    </string-array>
+
+    <string name="drawer_open">Открыть навигационную панель</string>
+    <string name="drawer_close">Скрыть навигационную панель</string>
+    <string name="phone_prefix">тел. </string>
+
+    <string name="about_string_1">Приложение «СМС одним тапом»</string>
+    <string name="about_string_2">Поддерживаемые ОС: Android\nВерсия: 1.9\nРазработчик: ООО «Криэйт» (г.Красноярск)\ne-mail: balu@kriate.ru\nтел.: (391) 215-44-30</string>
+
+</resources>
