@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <string name="program_title">СМС одним тапом</string>
+
     <string name="sms_send_success">Сообщение отправлено!</string>
     <string name="sms_send_failed">Сообщение не отправлено, попробуйте позже!</string>
     <string name="sms_add_template">Новый шаблон</string>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <string name="program_title">All SMS by one tap</string>
+
     <string name="sms_send_success">SMS Sent!</string>
     <string name="sms_send_failed">SMS failed, please try again later!</string>
     <string name="sms_add_template">New template</string>
@@ -44,7 +46,7 @@
     <string name="action_other">Other</string>
 
     <string-array name="screen_array">
-        <item>All SMS</item>
+        <item>All Sms</item>
         <item>Category</item>
         <item>About</item>
     </string-array>

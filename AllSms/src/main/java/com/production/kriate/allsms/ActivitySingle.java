@@ -136,7 +136,11 @@ public class ActivitySingle extends ActionBarActivity {
             fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
 
             mDrawerList.setItemChecked(position, true);
-            setTitle(mScreenTitles[position]);
+            if (position == 0) {
+                setTitle(getResources().getString(R.string.program_title));
+            } else{
+                setTitle(mScreenTitles[position]);
+            }
             mDrawerLayout.closeDrawer(mDrawerList);
         }
     }
