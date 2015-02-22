@@ -72,7 +72,7 @@ public class DbConnector {
         public void onUpgrade(@NotNull SQLiteDatabase db, int oldVersion, int newVersion) {
             db.beginTransaction();
             try {
-                for (int i = 1; i <= newVersion; i++) {
+                for (int i = oldVersion; i <= newVersion; i++) {
                     db.execSQL(mQueries.get(i));
                 }
                 db.setTransactionSuccessful();

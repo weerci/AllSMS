@@ -55,7 +55,7 @@
     <string name="phone_prefix">тел. </string>
 
     <string name="about_string_1">Приложение «СМС одним тапом»</string>
-    <string name="about_string_2">Поддерживаемые ОС: Android\nВерсия: 2.0\nРазработчик: ООО «Криэйт»
+    <string name="about_string_2">Поддерживаемые ОС: Android\nВерсия: %1$s\nРазработчик: ООО «Криэйт»
         (г.Красноярск)\ne–mail: balu@kriate.ru\nтел.: (391) 215-44-30</string>
 
 </resources>

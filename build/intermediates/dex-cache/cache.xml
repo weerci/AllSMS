@@ -6,14 +6,14 @@
         jumboMode="false"
         revision="21.1.2"
         sha1="bbcf6448f6d40abe506e2c83b70a3e8bfd2b4539">
-        <dex dex="C:\src\Android\AllSms\AllSms\build\intermediates\pre-dexed\release\annotations-12.0-7bc5ca9075b62755c63e72aab5b14994b4020912.jar" />
+        <dex dex="C:\src\Android\AllSms\AllSms\build\intermediates\pre-dexed\debug\annotations-12.0-7bc5ca9075b62755c63e72aab5b14994b4020912.jar" />
     </item>
     <item
         jar="C:\src\Android\AllSms\AllSms\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="C:\src\Android\AllSms\AllSms\build\intermediates\pre-dexed\release\classes-0c250655029ff3ae8e19b483d2cd4b1c5e33d601.jar" />
+        <dex dex="C:\src\Android\AllSms\AllSms\build\intermediates\pre-dexed\debug\classes-0c250655029ff3ae8e19b483d2cd4b1c5e33d601.jar" />
     </item>
     <item
         jar="C:\temp\AllSMS\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
@@ -27,7 +27,7 @@
         jumboMode="false"
         revision="21.1.2"
         sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="C:\src\Android\AllSms\AllSms\build\intermediates\pre-dexed\release\internal_impl-21.0.3-6e31e84d8a12a6057276de0de6a99c1d50d8dc4d.jar" />
+        <dex dex="C:\src\Android\AllSms\AllSms\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-6e31e84d8a12a6057276de0de6a99c1d50d8dc4d.jar" />
     </item>
     <item
         jar="C:\temp\AllSMS\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
@@ -41,7 +41,7 @@
         jumboMode="false"
         revision="21.1.2"
         sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="C:\src\Android\AllSms\AllSms\build\intermediates\pre-dexed\release\classes-9bf0f8543088dae369ca98e73fda803d93ed9e48.jar" />
+        <dex dex="C:\src\Android\AllSms\AllSms\build\intermediates\pre-dexed\debug\classes-9bf0f8543088dae369ca98e73fda803d93ed9e48.jar" />
     </item>
     <item
         jar="C:\temp\AllSMS\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"

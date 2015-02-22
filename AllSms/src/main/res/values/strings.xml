@@ -54,7 +54,7 @@
     <string name="phone_prefix">tel. </string>
 
     <string name="about_string_1">"All Sms by one tap"</string>
-    <string name="about_string_2">Supported OS: Android\nVersion: 2.0\nDeveloper: OOO «Kriate»
+    <string name="about_string_2">Supported OS: Android\nVersion: %1$s\nDeveloper: OOO «Kriate»
         (Krasnoyars city, Russian federation)\ne–mail: balu@kriate.ru\nтел.: (391) 215-44-30</string>
 
 </resources>
