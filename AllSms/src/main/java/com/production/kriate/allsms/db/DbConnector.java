@@ -45,34 +45,40 @@ public class DbConnector {
         // Данные базы данных и таблиц
         private static final String DATABASE_NAME = "template.db";
         private static final int DATABASE_VERSION = 2;
+        private ArrayList<String> mQueries = new ArrayList<>();
 
         private OpenHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+            mQueries.add("CREATE TABLE sms (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, TitleSms TEXT, TextSms TEXT, PhoneNumber TEXT, Priority INTEGER); ");
+            mQueries.add("CREATE TABLE category (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL); ");
+            mQueries.add("CREATE TABLE sms_category (id_sms INTEGER REFERENCES sms (id), id_category INTEGER REFERENCES category (id), PRIMARY KEY (id_sms ASC, id_category ASC)); ");
         }
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-/*
-            String query = "CREATE TABLE " + TableSms.TABLE_NAME + " (" +
-                    TableSms.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                    TableSms.COLUMN_TITLE_SMS + " TEXT, " +
-                    TableSms.COLUMN_TEXT_SMS + " TEXT, " +
-                    TableSms.COLUMN_PHONE_NUMBER + " TEXT, " +
-                    TableSms.COLUMN_PRIORITY + " INTEGER ); ";
-            db.execSQL(query);
-*/
+            db.beginTransaction();
+            try {
+                for (String s : mQueries) {
+                    db.execSQL(s);
+                }
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
         }
 
         @Override
         public void onUpgrade(@NotNull SQLiteDatabase db, int oldVersion, int newVersion) {
-            String query = "CREATE TABLE category (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)";
-            db.execSQL(query);
-
-            query = "CREATE TABLE sms_category (id_sms INTEGER REFERENCES sms (id), id_category INTEGER REFERENCES category (id), PRIMARY KEY (id_sms ASC, id_category ASC))";
-            db.execSQL(query);
-
-            onCreate(db);
-
+            db.beginTransaction();
+            try {
+                for (int i = 1; i <= newVersion; i++) {
+                    db.execSQL(mQueries.get(i));
+                }
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
         }
     }
 
