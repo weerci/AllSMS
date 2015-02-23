@@ -121,7 +121,12 @@ public class ActivitySingle extends ActionBarActivity {
                 selectItem(0, 0);
                 return true;
             case KeyEvent.KEYCODE_MENU:
-                mDrawerLayout.openDrawer(GravityCompat.START);
+                if(mDrawerLayout.isDrawerVisible(GravityCompat.START)){
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                } else {
+                    mDrawerLayout.openDrawer(GravityCompat.START);
+                }
+
                 break;
         }
         return super.onKeyDown(keyCode, event);
