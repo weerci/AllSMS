@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,7 +35,6 @@ public class ActivitySingle extends ActionBarActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,18 +97,35 @@ public class ActivitySingle extends ActionBarActivity {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-//        // Handle action buttons
-//        switch(item.getItemId()) {
-//            case R.id.menu_item_new_template:
-//                Intent i = new Intent(this, EditSmsActivity.class);
-//                startActivityForResult(i, PageSmsFragment.SMS_INSERT);
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
         return super.onOptionsItemSelected(item);
     }
-
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getSupportActionBar().setTitle(mTitle);
+    }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                selectItem(0, 0);
+                return true;
+            case KeyEvent.KEYCODE_MENU:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -144,21 +162,5 @@ public class ActivitySingle extends ActionBarActivity {
             mDrawerLayout.closeDrawer(mDrawerList);
         }
     }
-    @Override
-    public void setTitle(CharSequence title) {
-        mTitle = title;
-        getSupportActionBar().setTitle(mTitle);
-    }
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
 
 }
