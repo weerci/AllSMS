@@ -78,7 +78,7 @@ public class EditSmsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DbSms dbSms = new DbSms(mId, mTitleField.getText().toString(), mTextField.getText().toString(),
-                        mPhoneField.getText().toString(), checkToPriority());
+                        mPhoneField.getText().toString(), checkToPriority(), mSms.getCategory());
                 Intent intent = new Intent();
                 intent.putExtra(EXTRA_SMS, dbSms);
                 getActivity().setResult(Activity.RESULT_OK, intent);

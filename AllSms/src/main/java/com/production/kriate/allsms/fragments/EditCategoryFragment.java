@@ -74,8 +74,8 @@ public class EditCategoryFragment extends Fragment {
             mIdCategory = dbCategory.getId();
             mNameField.setText(dbCategory.getName());
         }
-        mSelectedSms = DbConnector.newInstance(getActivity()).getCategory().getSelectedSms(mIdCategory);
-        mAvailableSms = DbConnector.newInstance(getActivity()).getCategory().getAvailableSms(mIdCategory);
+        mSelectedSms = DbConnector.newInstance(getActivity()).getCategory().getSelectedSms(dbCategory);
+        mAvailableSms = DbConnector.newInstance(getActivity()).getCategory().getAvailableSms(dbCategory);
 
         // Кнопки
         Button saveButton = (Button) v.findViewById(R.id.categoryButtonSave);

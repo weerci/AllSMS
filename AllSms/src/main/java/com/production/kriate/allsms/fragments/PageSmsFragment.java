@@ -174,7 +174,7 @@ public class PageSmsFragment extends Fragment {
                     smsList = DbConnector.newInstance(getActivity()).getSms().selectFavorite();
                     break;
                 default:
-                    smsList = DbConnector.newInstance(getActivity()).getCategory().getSelectedSms(mCategoryList.get(position).getId());
+                    smsList = DbConnector.newInstance(getActivity()).getCategory().getSelectedSms(mCategoryList.get(position));
                     break;
             }
 
