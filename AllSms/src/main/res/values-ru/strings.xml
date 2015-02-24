@@ -17,11 +17,12 @@
     <string name="text_template_label">Текст шаблона</string>
     <string name="text_template_hint">Введите текст шаблона</string>
     <string name="phone_template_label">Телефон получателя</string>
-    <string name="phone_template_hint">Введите телефонный номер</string>
+    <string name="phone_template_hint">Введите телефон</string>
     <string name="favorite_template_label">Избранные</string>
     <string name="select_phone_label">Выбрать</string>
     <string name="save">Сохранить</string>
     <string name="cancel">Отмена</string>
+    <string name="empty_categroy">Категория не задана</string>
 
     <!--Редактирование категории-->
     <string name="header_category_editor">Редактирование катерогии</string>
@@ -30,7 +31,7 @@
     <string name="category_sms_selected">Выбранные</string>
     <string name="category_sms_available">Досупные</string>
     <string name="category_add_sms">Добавить выбранный шаблон в категорию?</string>
-    <string name="categroy_remove_sms" tools:ignore="ExtraTranslation">Удалить выбранный шаблон из категории?</string>
+    <string name="category_remove_sms">Удалить выбранный шаблон из категории?</string>
     <string name="category_add_title">Добавить шаблон</string>
     <string name="category_remove_title">Удалить шаблон</string>
 
@@ -51,7 +52,6 @@
         <item>Категории</item>
         <item>О программе</item>
     </string-array>
-
     <string name="drawer_open">Открыть навигационную панель</string>
     <string name="drawer_close">Скрыть навигационную панель</string>
     <string name="phone_prefix">тел. </string>

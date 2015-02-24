@@ -72,7 +72,7 @@ public class DbConnector {
         public void onUpgrade(@NotNull SQLiteDatabase db, int oldVersion, int newVersion) {
             db.beginTransaction();
             try {
-                for (int i = oldVersion; i <= newVersion; i++) {
+                for (int i = oldVersion+2/*Коррекция изначальная, 2 версия, имела 3 записи*/; i <= mQueries.size(); i++) {
                     db.execSQL(mQueries.get(i));
                 }
                 db.setTransactionSuccessful();
@@ -84,6 +84,7 @@ public class DbConnector {
 
     // Реализует взаимодействие с таблицой sms
     public static class Sms{
+        // region +Modificators
         public long insert(@NotNull DbSms ds) {
             ContentValues cv = new ContentValues();
             cv.put(TableSms.COLUMN_TITLE_SMS, ds.getTitleSms());
@@ -104,11 +105,9 @@ public class DbConnector {
         public void deleteOne(long id) {
             mDataBase.delete(TableSms.TABLE_NAME, TableSms.COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
         }
-        public void deleteArray(@NotNull int[] ids) {
-            for (int i : ids){
-                deleteOne(i);
-            }
-        }
+        // endregion
+
+        // region +Selectors
         @NotNull
         public DbSms selectOne(long id) {
             String queryText = "select s.*, sc.id_category from sms s left join sm_category sc on s.id = sc.id_sms  where s.id = ?";
@@ -175,6 +174,7 @@ public class DbConnector {
             }
             return arr;
         }
+        // endregion
     }
     // Реализует взаимодействие с таблицей category
     public static class Category{
@@ -218,13 +218,14 @@ public class DbConnector {
                         ") values("+String.valueOf(id_category)+", "+String.valueOf(i.getId())+")");
             }
         }
-
-        public void deleteOne(long id){
-            mDataBase.delete(TableCategory.TABLE_NAME, TableCategory.COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
-        }
-        public void deleteArray(@NotNull int[] ids){
-            for (int i : ids) {
-                deleteOne(i);
+        public void deleteOne(long idCategory){
+            mDataBase.beginTransaction();
+            try {
+                mDataBase.delete(TableCategory.TABLE_NAME, TableCategory.COLUMN_ID + " = ?", new String[] { String.valueOf(idCategory) });
+                mDataBase.delete(TableSmsCategory.TABLE_NAME, TableSmsCategory.COLUMN_ID_CATEGORY + " = ?", new String[] { String.valueOf(idCategory) });
+                mDataBase.setTransactionSuccessful();
+            } finally {
+                mDataBase.endTransaction();
             }
         }
         @Nullable
@@ -275,6 +276,10 @@ public class DbConnector {
         }
         @NotNull
         public ArrayList<DbSms> getSelectedSms(DbCategory category){
+            ArrayList<DbSms> arr = new ArrayList<>();
+            if (category == null) {
+                return  arr;
+            }
             String queryText = String.format("select s.%1$s, s.%2$s, s.%3$s, s.%4$s, s.%5$s from sms s left join sms_category sc on sc.id_sms = s.id where sc.id_category = %6$s",
                     TableSms.COLUMN_ID,
                     TableSms.COLUMN_TITLE_SMS,
@@ -283,7 +288,6 @@ public class DbConnector {
                     TableSms.COLUMN_PRIORITY,
                     category.getId());
             Cursor mCursor = mDataBase.rawQuery(queryText, new String [] {});
-            ArrayList<DbSms> arr = new ArrayList<>();
             try {
                 mCursor.moveToFirst();
                 if (!mCursor.isAfterLast()) {
@@ -302,7 +306,7 @@ public class DbConnector {
             return arr;
         }
         @NotNull
-        public ArrayList<DbSms> getAvailableSms(DbCategory dbCategory){
+        public ArrayList<DbSms> getAvailableSms(){
             String queryText = String.format("select s.%1$s, s.%2$s, s.%3$s, s.%4$s, s.%5$s  from sms s where s.id not in (select sc.id_sms from sms_category sc)",
                     TableSms.COLUMN_ID,
                     TableSms.COLUMN_TITLE_SMS,
@@ -321,7 +325,7 @@ public class DbConnector {
                         String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
                         String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
                         int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
-                        arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority, dbCategory));
+                        arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority, null));
                     } while (mCursor.moveToNext());
                 }
             } finally {

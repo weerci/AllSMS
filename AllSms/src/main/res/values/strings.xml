@@ -14,14 +14,16 @@
     <string name="header_template_editor">Edit of template</string>
     <string name="title_template_label">Title template</string>
     <string name="template_title_hint">Type a title for the template.</string>
+    <string name="text_category_label">Category of template</string>
     <string name="text_template_label">Text template</string>
     <string name="text_template_hint">Type a text for the template.</string>
     <string name="phone_template_label">Phone recipient</string>
-    <string name="phone_template_hint">Type or select a phone number.</string>
+    <string name="phone_template_hint">Enter the phone</string>
     <string name="favorite_template_label">Is favorite</string>
     <string name="select_phone_label">Select</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="empty_categroy">Category not present</string>
 
     <!--Редактирование категории-->
     <string name="header_category_editor">Edit of categroy</string>
@@ -30,7 +32,7 @@
     <string name="category_sms_selected">Selected</string>
     <string name="category_sms_available">Available</string>
     <string name="category_add_sms">Add selected sms-template to category?</string>
-    <string name="category_remove_sms" tools:ignore="MissingTranslation">Remove selected sms-template from category?</string>
+    <string name="category_remove_sms">Remove selected sms-template from category?</string>
     <string name="category_add_title">Add template</string>
     <string name="category_remove_title">Remove template</string>
 
@@ -50,7 +52,6 @@
         <item>Category</item>
         <item>About</item>
     </string-array>
-
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="phone_prefix">tel. </string>

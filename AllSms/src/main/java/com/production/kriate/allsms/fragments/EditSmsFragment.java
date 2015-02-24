@@ -11,14 +11,21 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.production.kriate.allsms.R;
+import com.production.kriate.allsms.db.DbCategory;
+import com.production.kriate.allsms.db.DbConnector;
 import com.production.kriate.allsms.db.DbSms;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class EditSmsFragment extends Fragment {
     public static final String EXTRA_SMS = "com.production.kriate.allsms.EditSmsFragment.EXTRA_SMS";
@@ -26,7 +33,10 @@ public class EditSmsFragment extends Fragment {
     private DbSms mSms;
     private EditText mTitleField, mTextField, mPhoneField;
     private CheckBox mIsFavorite;
+    private Spinner mCategroySpinner;
+    private ArrayAdapter<DbCategory> mAdapterCategory;
     private long mId;
+
 
     @NotNull
     public static EditSmsFragment newInstance(DbSms ds) {
@@ -48,6 +58,9 @@ public class EditSmsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        mAdapterCategory = new ArrayAdapter<DbCategory>(getActivity(), R.layout.spinner_item_categroy,
+                DbConnector.newInstance(getActivity()).getCategory().selectAll());
     }
     @Override
     public void onPrepareOptionsMenu(@NotNull Menu menu) {
@@ -61,6 +74,8 @@ public class EditSmsFragment extends Fragment {
         mTextField = (EditText) v.findViewById(R.id.sms_text_edit_text);
         mIsFavorite = (CheckBox) v.findViewById(R.id.sms_is_favorite_checkbox);
         mPhoneField = (EditText) v.findViewById(R.id.phone_number_edit_text);
+        mCategroySpinner = (Spinner)v.findViewById(R.id.sms_category_spinner);
+        mCategroySpinner.setAdapter(mAdapterCategory);
         mId = DbSms.EMPTY_ID;
 
         if (mSms != null) {
@@ -78,7 +93,9 @@ public class EditSmsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DbSms dbSms = new DbSms(mId, mTitleField.getText().toString(), mTextField.getText().toString(),
-                        mPhoneField.getText().toString(), checkToPriority(), mSms.getCategory());
+                        mPhoneField.getText().toString(), checkToPriority(),
+                        (DbCategory)checkPositionArray(mCategroySpinner.getSelectedItemPosition(), mAdapterCategory));
+
                 Intent intent = new Intent();
                 intent.putExtra(EXTRA_SMS, dbSms);
                 getActivity().setResult(Activity.RESULT_OK, intent);
@@ -100,6 +117,9 @@ public class EditSmsFragment extends Fragment {
         });
 
         return v;
+    }
+    private Object checkPositionArray(int position, ArrayAdapter<?> arrayAdapter) {
+        return position == -1? null : arrayAdapter.getItem(position);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @NotNull Intent data) {

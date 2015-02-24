@@ -24,7 +24,6 @@
             android:text="@string/save"
             tools:ignore="ButtonStyle"/>
     </LinearLayout>
-
     <ScrollView
         android:layout_above="@id/buttons"
         android:layout_width="match_parent"
@@ -33,6 +32,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="4dp"
             android:orientation="vertical" >
             <TextView
                 android:layout_width="wrap_content"
@@ -56,23 +56,43 @@
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences"
                 android:hint="@string/text_template_hint"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/phone_template_label"
+                        />
+                    <EditText
+                        android:id="@+id/phone_number_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/phone_template_hint"/>
+                </LinearLayout>
+                <Button
+                    android:id="@+id/select_phone_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="@string/select_phone_label"
+                    android:padding="4dp"/>
+            </LinearLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/phone_template_label"
+                android:text="@string/text_category_label"
                 />
-            <EditText
-                android:id="@+id/phone_number_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/phone_template_hint" tools:ignore="TextFields"/>
-            <Button
-                android:id="@+id/select_phone_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:text="@string/select_phone_label"
-                android:padding="4dp" tools:ignore="RtlHardcoded"/>
+            <Spinner
+                android:id="@+id/sms_category_spinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
             <CheckBox
                 android:id="@+id/sms_is_favorite_checkbox"
                 android:layout_width="wrap_content"
@@ -80,6 +100,7 @@
                 android:layout_marginLeft="4dp"
                 android:text="@string/favorite_template_label"
                 tools:ignore="RtlHardcoded"/>
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

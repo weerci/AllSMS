@@ -55,7 +55,6 @@ public class EditCategoryFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +74,7 @@ public class EditCategoryFragment extends Fragment {
             mNameField.setText(dbCategory.getName());
         }
         mSelectedSms = DbConnector.newInstance(getActivity()).getCategory().getSelectedSms(dbCategory);
-        mAvailableSms = DbConnector.newInstance(getActivity()).getCategory().getAvailableSms(dbCategory);
+        mAvailableSms = DbConnector.newInstance(getActivity()).getCategory().getAvailableSms();
 
         // Кнопки
         Button saveButton = (Button) v.findViewById(R.id.categoryButtonSave);

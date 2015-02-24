@@ -50,7 +50,7 @@ public class AddCategoryFragment extends DialogFragment {
                 dialogTitle = getResources().getString(R.string.category_add_title);
                 break;
             default:
-                textView.setText(getResources().getString(R.string.categroy_remove_sms));
+                textView.setText(getResources().getString(R.string.category_remove_sms));
                 dialogTitle = getResources().getString(R.string.category_remove_title);
                 break;
         }
