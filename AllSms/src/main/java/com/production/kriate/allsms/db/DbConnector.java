@@ -293,7 +293,7 @@ public class DbConnector {
                     " = ? AND " + TableSmsCategory.COLUMN_ID_CATEGORY + " = ?", new String[] { String.valueOf(id_sms), String.valueOf(id_category) });
         }
         @NotNull
-        public ArrayList<DbSms> getSelectedSms(long idCategory){
+        public ArrayList<DbSms> getSelectedSms(DbCategory category){
             String queryText = String.format("select s.%1$s, s.%2$s, s.%3$s, s.%4$s, s.%5$s from sms s left join sms_category sc on sc.id_sms = s.id where sc.id_category = %6$s",
                     TableSms.COLUMN_ID,
                     TableSms.COLUMN_TITLE_SMS,
@@ -312,7 +312,7 @@ public class DbConnector {
                         String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
                         String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
                         int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
-                        arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority));
+                        arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority, category));
                     } while (mCursor.moveToNext());
                 }
             } finally {
@@ -321,14 +321,13 @@ public class DbConnector {
             return arr;
         }
         @NotNull
-        public ArrayList<DbSms> getAvailableSms(long idCategory){
-            String queryText = String.format("select s.%1$s, s.%2$s, s.%3$s, s.%4$s, s.%5$s  from sms s where s.id not in (select sc.id_sms from sms_category sc WHERE sc.id_category = %6$s)",
+        public ArrayList<DbSms> getAvailableSms(DbCategory dbCategory){
+            String queryText = String.format("select s.%1$s, s.%2$s, s.%3$s, s.%4$s, s.%5$s  from sms s where s.id not in (select sc.id_sms from sms_category sc)",
                     TableSms.COLUMN_ID,
                     TableSms.COLUMN_TITLE_SMS,
                     TableSms.COLUMN_TEXT_SMS,
                     TableSms.COLUMN_PHONE_NUMBER,
-                    TableSms.COLUMN_PRIORITY,
-                    idCategory);
+                    TableSms.COLUMN_PRIORITY);
 
             Cursor mCursor = mDataBase.rawQuery(queryText, new String [] {});
             ArrayList<DbSms> arr = new ArrayList<>();
@@ -341,7 +340,7 @@ public class DbConnector {
                         String textSms = mCursor.getString(TableSms.NUM_COLUMN_TEXT_SMS);
                         String phoneNumber = mCursor.getString(TableSms.NUM_COLUMN_PHONE_NUMBER);
                         int priority = mCursor.getInt(TableSms.NUM_COLUMN_PRIORITY);
-                        arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority));
+                        arr.add(new DbSms(id, titleSms, textSms, phoneNumber, priority, dbCategory));
                     } while (mCursor.moveToNext());
                 }
             } finally {
