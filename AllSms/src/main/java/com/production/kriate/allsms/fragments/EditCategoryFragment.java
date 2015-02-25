@@ -62,7 +62,7 @@ public class EditCategoryFragment extends Fragment {
     }
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.categroy_fragment, container, false);
+        View v = inflater.inflate(R.layout.edit_categroy_layout, container, false);
 
         mNameField = (EditText) v.findViewById(R.id.category_name_edit_text);
         mIdCategory = DbCategory.EMPTY_ID;
@@ -114,7 +114,7 @@ public class EditCategoryFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @NotNull Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            DbSms dbSms = (DbSms)data.getSerializableExtra(AddCategoryFragment.EXTRA_SMS);
+            DbSms dbSms = (DbSms)data.getSerializableExtra(DialogSendSmsFragment.EXTRA_SMS);
             switch (requestCode) {
                 case 1:
                     mSelectedSms.remove(dbSms);
@@ -150,7 +150,7 @@ public class EditCategoryFragment extends Fragment {
         }
         @Override
         public Object instantiateItem(@NotNull ViewGroup container, int position) {
-            View v = getActivity().getLayoutInflater().inflate(R.layout.page_item, container, false);
+            View v = getActivity().getLayoutInflater().inflate(R.layout.page_sms_item, container, false);
             container.addView(v);
             mListView = (ListView)v.findViewById(R.id.list_view_sms);
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -161,15 +161,15 @@ public class EditCategoryFragment extends Fragment {
                     ListSmsAdapter listSmsAdapter = (ListSmsAdapter)mListView.getAdapter();
                     DbSms dbSms = listSmsAdapter.arrayDbSms.get(position);
 
-                    AddCategoryFragment addCategoryFragment;
+                    DialogSendSmsFragment addCategoryFragment;
                     switch (mViewPager.getCurrentItem()) {
                         case 1:
-                            addCategoryFragment = AddCategoryFragment.newInstance(dbSms);
-                            addCategoryFragment.setTargetFragment(EditCategoryFragment.this, AddCategoryFragment.ADD_SMS);
+                            addCategoryFragment = DialogSendSmsFragment.newInstance(dbSms);
+                            addCategoryFragment.setTargetFragment(EditCategoryFragment.this, DialogSendSmsFragment.ADD_SMS);
                             break;
                         default:
-                            addCategoryFragment = AddCategoryFragment.newInstance(dbSms);
-                            addCategoryFragment.setTargetFragment(EditCategoryFragment.this, AddCategoryFragment.REMOVE_SMS);
+                            addCategoryFragment = DialogSendSmsFragment.newInstance(dbSms);
+                            addCategoryFragment.setTargetFragment(EditCategoryFragment.this, DialogSendSmsFragment.REMOVE_SMS);
                             break;
                     }
                     addCategoryFragment.show(fm, DIALOG_ADD_REMOVE_CATEGORY_TO_SMS);

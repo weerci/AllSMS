@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Фрагмент реализующий возможность добавления категорий
  */
-public class AddCategoryFragment extends DialogFragment {
+public class DialogSendSmsFragment extends DialogFragment {
     public final static int ADD_SMS = 0;
     public final static int REMOVE_SMS = 1;
     public final static String EXTRA_SMS = "com.production.kriate.allsms.addCategoryFragment.EXTRA_ID_SMS";
@@ -27,10 +27,10 @@ public class AddCategoryFragment extends DialogFragment {
 
 
     @NotNull
-    public static AddCategoryFragment newInstance(DbSms sms) {
+    public static DialogSendSmsFragment newInstance(DbSms sms) {
         Bundle args = new Bundle();
         args.putSerializable(EXTRA_SMS, sms);
-        AddCategoryFragment fragment = new AddCategoryFragment();
+        DialogSendSmsFragment fragment = new DialogSendSmsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -38,9 +38,9 @@ public class AddCategoryFragment extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        @SuppressLint("InflateParams") View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_send_sms, null);
+        @SuppressLint("InflateParams") View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_send_sms_layout, null);
 
-        mDbSms = (DbSms)getArguments().getSerializable(AddCategoryFragment.EXTRA_SMS);
+        mDbSms = (DbSms)getArguments().getSerializable(DialogSendSmsFragment.EXTRA_SMS);
 
         TextView textView = (TextView) v.findViewById(R.id.dialog_send_sms_text);
         String dialogTitle;
@@ -74,7 +74,7 @@ public class AddCategoryFragment extends DialogFragment {
             return;
         }
         Intent i = new Intent();
-        i.putExtra(AddCategoryFragment.EXTRA_SMS, mDbSms);
+        i.putExtra(DialogSendSmsFragment.EXTRA_SMS, mDbSms);
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
     }
 

@@ -24,15 +24,21 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-public class CategorySmsFragment extends Fragment{
-    private static final int CATEGORY_UPDATE = 0;
-    private static final int CATEGORY_INSERT = 1;
+/*
+* Список категорий отображаемый при вызове пользователя функционала доступа к категориям
+  Связанный с ним layout - List_category_layout
+*/
+public class ListCategoryFragment extends Fragment{
+    private static final int CATEGORY_UPDATE = 0; // Флаг, указывающий, что фрагмент создается для обновления категории
+    private static final int CATEGORY_INSERT = 1;// Флаг, указывающий, что фрагмент создатся для добавления категории
     private CategoryListAdapter mCategoryListAdapter;
 
-    @NotNull
-    public static CategorySmsFragment newInstance(){
-        return new CategorySmsFragment();
+    // Статический метод для создания класса
+    public static ListCategoryFragment newInstance(){
+        return new ListCategoryFragment();
     }
+
+    // region Override методы
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +51,7 @@ public class CategorySmsFragment extends Fragment{
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.category_sms, container, false);
+        View v = inflater.inflate(R.layout.list_category_layout, container, false);
         ListView listView = (ListView) v.findViewById(R.id.list_view_category);
         listView.setAdapter(mCategoryListAdapter);
         registerForContextMenu(listView);
@@ -57,7 +63,7 @@ public class CategorySmsFragment extends Fragment{
         switch(item.getItemId()) {
             case R.id.menu_item_new_template:
                 Intent i = new Intent(getActivity(), EditCategoryActivity.class);
-                startActivityForResult(i, CategorySmsFragment.CATEGORY_INSERT);
+                startActivityForResult(i, ListCategoryFragment.CATEGORY_INSERT);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -105,14 +111,22 @@ public class CategorySmsFragment extends Fragment{
         }
 
     }
+
+    // endregion
+
+    // region Helper
+
     private void updateList () {
         mCategoryListAdapter.setArrayDbContainer(DbConnector.newInstance(getActivity()).getCategory().selectAll());
         mCategoryListAdapter.notifyDataSetChanged();
     }
 
+    // endregion
+
+    // region Классы адаптеров
+
     private class CategoryListAdapter extends BaseAdapter{
         private ArrayList<DbCategory> arrayDbCategory;
-
         public CategoryListAdapter (ArrayList<DbCategory> arr) {
             setArrayDbContainer(arr);
         }
@@ -136,7 +150,7 @@ public class CategorySmsFragment extends Fragment{
         @Nullable
         public View getView(int position, @Nullable View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.category_list_item, null);
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.category_sms_item, null);
             }
 
             DbCategory dc = arrayDbCategory.get(position);
@@ -147,4 +161,8 @@ public class CategorySmsFragment extends Fragment{
         }
 
     }
+
+    // endregion
+
+
 }

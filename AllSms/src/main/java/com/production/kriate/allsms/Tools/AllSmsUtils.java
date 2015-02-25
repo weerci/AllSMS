@@ -1,4 +1,4 @@
-package com.production.kriate.allsms;
+package com.production.kriate.allsms.Tools;
 
 
 import android.content.Context;

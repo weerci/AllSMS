@@ -24,9 +24,6 @@ import com.production.kriate.allsms.db.DbSms;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Objects;
-
 public class EditSmsFragment extends Fragment {
     public static final String EXTRA_SMS = "com.production.kriate.allsms.EditSmsFragment.EXTRA_SMS";
     private static final int REQUEST_CONTACT = 0;
@@ -68,7 +65,7 @@ public class EditSmsFragment extends Fragment {
     }
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.sms_fragment, container, false);
+        View v = inflater.inflate(R.layout.edit_sms_layout, container, false);
 
         mTitleField = (EditText) v.findViewById(R.id.sms_title_edit_text);
         mTextField = (EditText) v.findViewById(R.id.sms_text_edit_text);

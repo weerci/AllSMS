@@ -26,12 +26,6 @@ public class SmsSendFragment extends DialogFragment{
         smsSendFragment.setDbSms(dbSms);
         return  smsSendFragment;
     }
-
-// --Commented out by Inspection START (20.02.2015 21:10):
-//    public DbSms getDbSms() {
-//        return mDbSms;
-//    }
-// --Commented out by Inspection STOP (20.02.2015 21:10)
     void setDbSms(DbSms dbSms) {
         mDbSms = dbSms;
     }
@@ -39,7 +33,7 @@ public class SmsSendFragment extends DialogFragment{
     @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        @SuppressLint("InflateParams") View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_send_sms, null);
+        @SuppressLint("InflateParams") View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_send_sms_layout, null);
 
         TextView textView = (TextView) v.findViewById(R.id.dialog_send_sms_text);
         String s = String.format(getResources().getString(R.string.sms_sender_text), mDbSms.getTextSms(), mDbSms.getPhoneNumber());

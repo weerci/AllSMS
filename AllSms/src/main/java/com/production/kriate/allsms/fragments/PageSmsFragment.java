@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.production.kriate.allsms.ActivitySingle;
 import com.production.kriate.allsms.EditSmsActivity;
 import com.production.kriate.allsms.R;
-import com.production.kriate.allsms.SmsSend;
+import com.production.kriate.allsms.Tools.SmsSend;
 import com.production.kriate.allsms.db.DbCategory;
 import com.production.kriate.allsms.db.DbConnector;
 import com.production.kriate.allsms.db.DbSms;
@@ -61,7 +61,7 @@ public class PageSmsFragment extends Fragment {
     }
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.page_sms, container, false);
+        return inflater.inflate(R.layout.page_sms_layout, container, false);
     }
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
@@ -151,7 +151,7 @@ public class PageSmsFragment extends Fragment {
         }
         @Override
         public Object instantiateItem(@NotNull ViewGroup container, int position) {
-            View v = getActivity().getLayoutInflater().inflate(R.layout.page_item, container, false);
+            View v = getActivity().getLayoutInflater().inflate(R.layout.page_sms_item, container, false);
             container.addView(v);
             final ListView listView = (ListView)v.findViewById(R.id.list_view_sms);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

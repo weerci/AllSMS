@@ -6,9 +6,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by dima on 12.02.2015.
- * Категория содержащая шаблоны выбранные по определенному критерию
- */
+ * Класс уровня модели.
+ * Описывает сущность "Категория", дающей возможность группировать шаблоны по категориям.
+  */
 public class DbCategory implements Serializable {
     public static final long EMPTY_ID = -1;
 

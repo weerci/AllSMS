@@ -1,9 +1,10 @@
-package com.production.kriate.allsms;
+package com.production.kriate.allsms.Tools;
 
 import android.content.Context;
 import android.telephony.SmsManager;
 import android.widget.Toast;
 
+import com.production.kriate.allsms.R;
 import com.production.kriate.allsms.db.DbSms;
 
 import org.jetbrains.annotations.NotNull;

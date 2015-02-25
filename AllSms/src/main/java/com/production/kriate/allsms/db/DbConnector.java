@@ -12,10 +12,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 /**
- * Created by dima on 28.01.2015.
- * Реализует взаимодействие с таблицей sms
+ * Класс реализующий шлюз базы данных.
+ * Реализует функционал сохранения, обновления, удаления и выборки из базы данных сущностей, описываемых классами
+ * DbSms и DbCategory
  */
-@SuppressWarnings("ALL")
 public class DbConnector {
 
     private static SQLiteDatabase mDataBase;
