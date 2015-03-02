@@ -19,7 +19,7 @@ public class DbSms implements Serializable {
     private final String mTextSms;   // Текст отправляемый в SMS
     private final String mPhoneNumber;    // Номер по которому отправляется SMS
     private final int mPriority;  // 0- не избранный, 1-избранный
-    private final DbCategory mCategory; // Категория, к которой принадлежит шаблон, может быть null
+    private DbCategory mCategory; // Категория, к которой принадлежит шаблон, может быть null
 
     public  DbSms(long id, String titleSms, String textSms, String phoneNumber, int priority,
                   DbCategory dbCategory) {
@@ -28,7 +28,7 @@ public class DbSms implements Serializable {
         mTextSms = textSms;
         mPriority = priority;
         mPhoneNumber = phoneNumber;
-        mCategory = dbCategory;
+        mCategory = dbCategory != null && dbCategory.getId() == -1 ? null : dbCategory;
     }
 
     @NotNull
@@ -53,4 +53,7 @@ public class DbSms implements Serializable {
         return mPriority;
     }
     public DbCategory getCategory() {return mCategory;}
+    public void setCategory(DbCategory category){
+        mCategory = category;
+    }
 }

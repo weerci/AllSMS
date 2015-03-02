@@ -1,6 +1,7 @@
 package com.production.kriate.allsms.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.production.kriate.allsms.R;
 import com.production.kriate.allsms.db.DbCategory;
@@ -24,6 +26,8 @@ import com.production.kriate.allsms.db.DbSms;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class EditSmsFragment extends Fragment {
     public static final String EXTRA_SMS = "com.production.kriate.allsms.EditSmsFragment.EXTRA_SMS";
     private static final int REQUEST_CONTACT = 0;
@@ -31,7 +35,6 @@ public class EditSmsFragment extends Fragment {
     private EditText mTitleField, mTextField, mPhoneField;
     private CheckBox mIsFavorite;
     private Spinner mCategroySpinner;
-    private ArrayAdapter<DbCategory> mAdapterCategory;
     private long mId;
 
 
@@ -55,9 +58,6 @@ public class EditSmsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        mAdapterCategory = new ArrayAdapter<DbCategory>(getActivity(), R.layout.spinner_item_categroy,
-                DbConnector.newInstance(getActivity()).getCategory().selectAll());
     }
     @Override
     public void onPrepareOptionsMenu(@NotNull Menu menu) {
@@ -72,8 +72,13 @@ public class EditSmsFragment extends Fragment {
         mIsFavorite = (CheckBox) v.findViewById(R.id.sms_is_favorite_checkbox);
         mPhoneField = (EditText) v.findViewById(R.id.phone_number_edit_text);
         mCategroySpinner = (Spinner)v.findViewById(R.id.sms_category_spinner);
-        mCategroySpinner.setAdapter(mAdapterCategory);
         mId = DbSms.EMPTY_ID;
+
+
+        CategroyAdapter adapter = new CategroyAdapter(getActivity(), DbConnector.newInstance(getActivity()).getCategory().selectWithEmpty());
+        adapter.setDropDownViewResource(R.layout.spinner_list_item);
+
+        mCategroySpinner.setAdapter(adapter);
 
         if (mSms != null) {
             mId = mSms.getId();
@@ -81,6 +86,13 @@ public class EditSmsFragment extends Fragment {
             mTextField.setText(mSms.getTextSms());
             mPhoneField.setText(mSms.getPhoneNumber());
             mIsFavorite.setChecked(mSms.getPriority() != 0);
+
+            if (mSms.getCategory() != null) {
+                DbCategory dbCategory = mSms.getCategory();
+                int i = adapter.getPosition(dbCategory);
+                mCategroySpinner.setSelection(i, false);
+            }
+
         }
 
         // Кнопки
@@ -90,8 +102,7 @@ public class EditSmsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DbSms dbSms = new DbSms(mId, mTitleField.getText().toString(), mTextField.getText().toString(),
-                        mPhoneField.getText().toString(), checkToPriority(),
-                        (DbCategory)checkPositionArray(mCategroySpinner.getSelectedItemPosition(), mAdapterCategory));
+                        mPhoneField.getText().toString(), checkToPriority(), (DbCategory)mCategroySpinner.getSelectedItem());
 
                 Intent intent = new Intent();
                 intent.putExtra(EXTRA_SMS, dbSms);
@@ -115,9 +126,6 @@ public class EditSmsFragment extends Fragment {
 
         return v;
     }
-    private Object checkPositionArray(int position, ArrayAdapter<?> arrayAdapter) {
-        return position == -1? null : arrayAdapter.getItem(position);
-    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @NotNull Intent data) {
         if (resultCode != Activity.RESULT_OK) return;
@@ -138,5 +146,43 @@ public class EditSmsFragment extends Fragment {
             String suspect = c.getString(indexNumber);
             mPhoneField.setText(suspect);
         }
+    }
+
+    private class CategroyAdapter extends ArrayAdapter<DbCategory> {
+
+        public CategroyAdapter(Context context, ArrayList<DbCategory> categories) {
+            super(context, R.layout.spinner_list_item, categories);
+        }
+
+        @Override
+        public int getPosition(DbCategory item) {
+            for (int i = 0; i < this.getCount(); i++) {
+                if(this.getItem(i).getId() == item.getId()) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getCategoryView(position, convertView, parent);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return getCategoryView(position, convertView, parent);
+        }
+        public View getCategoryView(int position, View convertView, ViewGroup parent) {
+            DbCategory dbCategory = getItem(position);
+
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.spinner_list_item, null);
+            }
+            ((TextView) convertView.findViewById(android.R.id.text1)).setText(dbCategory.getName());
+
+            return convertView;
+        }
+
     }
 }

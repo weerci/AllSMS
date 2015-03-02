@@ -2,39 +2,39 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\admin\.gradle\caches\modules-2\files-2.1\com.intellij\annotations\12.0\bbcf6448f6d40abe506e2c83b70a3e8bfd2b4539\annotations-12.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="bbcf6448f6d40abe506e2c83b70a3e8bfd2b4539">
-        <dex dex="C:\Users\admin\AndroidStudioProjects\AllSms\AllSms\build\intermediates\pre-dexed\debug\annotations-12.0-919421dee1182890a6b7dbb1dfab824f2bbf63d3.jar" />
-    </item>
-    <item
-        jar="C:\Users\admin\AndroidStudioProjects\AllSms\AllSms\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="C:\Users\admin\AndroidStudioProjects\AllSms\AllSms\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-ae597ced02f36cbf5286534c543c67d0d471cb2e.jar" />
-    </item>
-    <item
-        jar="C:\Users\admin\AndroidStudioProjects\AllSms\AllSms\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="C:\Users\admin\AndroidStudioProjects\AllSms\AllSms\build\intermediates\pre-dexed\debug\classes-3a18d0a30d9dd075cb2a1588ee3040a5b69cd0f7.jar" />
-    </item>
-    <item
-        jar="C:\Users\admin\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="C:\Users\admin\AndroidStudioProjects\AllSms\AllSms\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-ec6b31e72735cbfb4c9c77a49fb18a6f4c13d03b.jar" />
-    </item>
-    <item
-        jar="C:\Users\admin\AndroidStudioProjects\AllSms\AllSms\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
+        jar="C:\src\Android\AllSms\AllSms\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="C:\Users\admin\AndroidStudioProjects\AllSms\AllSms\build\intermediates\pre-dexed\debug\classes-bd0282002d10f68990a6ed9959ab03913f267b2f.jar" />
+        <dex dex="C:\src\Android\AllSms\AllSms\build\intermediates\pre-dexed\debug\classes-9bf0f8543088dae369ca98e73fda803d93ed9e48.jar" />
+    </item>
+    <item
+        jar="C:\Users\dima\.gradle\caches\modules-2\files-2.1\com.intellij\annotations\12.0\bbcf6448f6d40abe506e2c83b70a3e8bfd2b4539\annotations-12.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="bbcf6448f6d40abe506e2c83b70a3e8bfd2b4539">
+        <dex dex="C:\src\Android\AllSms\AllSms\build\intermediates\pre-dexed\debug\annotations-12.0-7bc5ca9075b62755c63e72aab5b14994b4020912.jar" />
+    </item>
+    <item
+        jar="C:\src\Android\AllSms\AllSms\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="C:\src\Android\AllSms\AllSms\build\intermediates\pre-dexed\debug\classes-0c250655029ff3ae8e19b483d2cd4b1c5e33d601.jar" />
+    </item>
+    <item
+        jar="C:\Users\dima\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="C:\src\Android\AllSms\AllSms\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-3e2402e25dd5392e708a2f630573d955ae51b07b.jar" />
+    </item>
+    <item
+        jar="C:\src\Android\AllSms\AllSms\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="C:\src\Android\AllSms\AllSms\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-6e31e84d8a12a6057276de0de6a99c1d50d8dc4d.jar" />
     </item>
 
 </items>

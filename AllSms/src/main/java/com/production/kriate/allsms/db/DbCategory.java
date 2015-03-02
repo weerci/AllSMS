@@ -1,5 +1,9 @@
 package com.production.kriate.allsms.db;
 
+import android.content.Context;
+
+import com.production.kriate.allsms.R;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
@@ -23,8 +27,8 @@ public class DbCategory implements Serializable {
     }
 
     @Nullable
-    public static DbCategory getEmptyCategory() {
-        return new DbCategory(EMPTY_ID, "",  null);
+    public static DbCategory getEmptyCategory(Context context) {
+        return new DbCategory(EMPTY_ID, context.getString(R.string.category_null),  null);
     }
     public long getId() {
         return mId;

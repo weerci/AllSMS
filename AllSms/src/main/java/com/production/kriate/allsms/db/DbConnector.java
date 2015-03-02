@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -20,25 +19,27 @@ public class DbConnector {
 
     private static SQLiteDatabase mDataBase;
     private static DbConnector sDbConnector;
+    private Context mContext;
 
     private DbConnector(Context context) {
         OpenHelper mOpenHelper = new OpenHelper(context);
         mDataBase = mOpenHelper.getWritableDatabase();
+        mContext = context;
     }
     public static DbConnector newInstance(@NotNull Context c){
         if (sDbConnector == null) {
-            sDbConnector = new DbConnector(c.getApplicationContext());
+            sDbConnector = new DbConnector(c);
         }
         return  sDbConnector;
     }
 
     @NotNull
     public Sms getSms(){
-        return new Sms();
+        return new Sms(mContext);
     }
     @NotNull
     public Category getCategory(){
-        return new Category();
+        return new Category(mContext);
     }
 
     private class OpenHelper extends SQLiteOpenHelper {
@@ -84,7 +85,11 @@ public class DbConnector {
 
     // Реализует взаимодействие с таблицой sms
     public static class Sms{
-        // region +Modificators
+        private Context mContext;
+        public Sms(Context context){
+            mContext = context;
+        }
+        // region + updater
         public long insert(@NotNull DbSms ds) {
             ContentValues cv = new ContentValues();
             cv.put(TableSms.COLUMN_TITLE_SMS, ds.getTitleSms());
@@ -92,7 +97,22 @@ public class DbConnector {
             cv.put(TableSms.COLUMN_PHONE_NUMBER, ds.getPhoneNumber());
             cv.put(TableSms.COLUMN_PRIORITY, ds.getPriority());
 
-            return mDataBase.insert(TableSms.TABLE_NAME, null, cv);
+
+            long i = DbSms.EMPTY_ID;
+            mDataBase.beginTransaction();
+            try {
+                i = mDataBase.insert(TableSms.TABLE_NAME, null, cv);
+                if (ds.getCategory() != null) {
+                    addCategory(i, ds.getCategory().getId());
+                } else {
+                    removeCategory(i);
+                }
+
+                mDataBase.setTransactionSuccessful();
+                return i;
+            } finally {
+                mDataBase.endTransaction();
+            }
         }
         public int update(@NotNull DbSms ds) {
             ContentValues cv=new ContentValues();
@@ -100,36 +120,45 @@ public class DbConnector {
             cv.put(TableSms.COLUMN_TEXT_SMS, ds.getTextSms());
             cv.put(TableSms.COLUMN_PHONE_NUMBER, ds.getPhoneNumber());
             cv.put(TableSms.COLUMN_PRIORITY, ds.getPriority());
-            return mDataBase.update(TableSms.TABLE_NAME, cv, TableSms.COLUMN_ID + " = ?", new String[] { String.valueOf(ds.getId()) });
+
+            int i;
+            mDataBase.beginTransaction();
+            try {
+                i = mDataBase.update(TableSms.TABLE_NAME, cv, TableSms.COLUMN_ID + " = ?", new String[] { String.valueOf(ds.getId()) });
+                if (ds.getCategory() != null) {
+                    addCategory(ds.getId(), ds.getCategory().getId());
+                } else {
+                    removeCategory(ds.getId());
+                }
+                mDataBase.setTransactionSuccessful();
+                return i;
+            } finally {
+                mDataBase.endTransaction();
+            }
         }
         public void deleteOne(long id) {
-            mDataBase.delete(TableSms.TABLE_NAME, TableSms.COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
+            mDataBase.beginTransaction();
+            try {
+                removeCategory(id);
+                mDataBase.delete(TableSms.TABLE_NAME, TableSms.COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
+                mDataBase.setTransactionSuccessful();
+            } finally {
+                mDataBase.endTransaction();
+            }
+
+        }
+        private void removeCategory(long idSms){
+            mDataBase.delete(TableSmsCategory.TABLE_NAME, TableSmsCategory.COLUMN_ID_SMS + " = ?", new String[]{String.valueOf(idSms)});
+        }
+        private void addCategory(long idSms, long idCategory){
+            removeCategory(idSms);
+            mDataBase.execSQL("insert into " + TableSmsCategory.TABLE_NAME + "(" + TableSmsCategory.COLUMN_ID_CATEGORY + ", " + TableSmsCategory.COLUMN_ID_SMS +
+                    ") values(" + String.valueOf(idCategory) + ", " + String.valueOf(idSms) + ")");
+
         }
         // endregion
 
         // region +Selectors
-        @NotNull
-        public DbSms selectOne(long id) {
-            String queryText = "select s.*, sc.id_category from sms s left join sm_category sc on s.id = sc.id_sms  where s.id = ?";
-            Cursor mCursor = mDataBase.rawQuery(queryText, new String [] {String.valueOf(id)});
-
-            try {
-                mCursor.moveToFirst();
-                if (!mCursor.isAfterLast()){
-                    String titleSms  = mCursor.getString(mCursor.getColumnIndex(TableSms.COLUMN_TITLE_SMS));
-                    String textSms = mCursor.getString(mCursor.getColumnIndex(TableSms.COLUMN_TEXT_SMS));
-                    String phoneNumber = mCursor.getString(mCursor.getColumnIndex(TableSms.COLUMN_PHONE_NUMBER));
-                    int priority = mCursor.getInt(mCursor.getColumnIndex(TableSms.COLUMN_PRIORITY));
-                    int idCategory = mCursor.getInt(mCursor.getColumnIndex(TableSmsCategory.COLUMN_ID_CATEGORY));
-
-                    return new DbSms(id, titleSms, textSms, phoneNumber, priority, new Category().selectOne(idCategory));
-                } else {
-                    return DbSms.getEmptySms();
-                }
-            } finally {
-                mCursor.close();
-            }
-        }
         @NotNull
         public ArrayList<DbSms> selectAll(){
             Cursor mCursor = mDataBase.query(TableSms.TABLE_NAME, null, null, null, null, null, TableSms.COLUMN_TITLE_SMS);
@@ -176,8 +205,14 @@ public class DbConnector {
         }
         // endregion
     }
+
     // Реализует взаимодействие с таблицей category
     public static class Category{
+        private Context mContext;
+        public Category(Context context){
+            mContext = context;
+        }
+        // region + Updaters
         public long insert(@NotNull DbCategory dc){
             ContentValues cv = new ContentValues();
             cv.put(TableCategory.COLUMN_NAME, dc.getName());
@@ -221,14 +256,16 @@ public class DbConnector {
         public void deleteOne(long idCategory){
             mDataBase.beginTransaction();
             try {
-                mDataBase.delete(TableCategory.TABLE_NAME, TableCategory.COLUMN_ID + " = ?", new String[] { String.valueOf(idCategory) });
                 mDataBase.delete(TableSmsCategory.TABLE_NAME, TableSmsCategory.COLUMN_ID_CATEGORY + " = ?", new String[] { String.valueOf(idCategory) });
+                mDataBase.delete(TableCategory.TABLE_NAME, TableCategory.COLUMN_ID + " = ?", new String[] { String.valueOf(idCategory) });
                 mDataBase.setTransactionSuccessful();
             } finally {
                 mDataBase.endTransaction();
             }
         }
-        @Nullable
+        // endregion
+
+        // region +Selectors
         public DbCategory selectOne(long id){
             Cursor mCursor = mDataBase.query(TableCategory.TABLE_NAME, null, TableCategory.COLUMN_ID + " = ?", new String[] { String.valueOf(id) },
                     null, null, TableCategory.COLUMN_NAME);
@@ -239,42 +276,57 @@ public class DbConnector {
                     String name  = mCursor.getString(TableCategory.NUM_COLUMN_NAME);
                     return new DbCategory(id, name, null);
                 } else {
-                    return DbCategory.getEmptyCategory();
+                    return DbCategory.getEmptyCategory(mContext);
                 }
             } finally {
                 mCursor.close();
             }
         }
-        @NotNull
+        public DbCategory selectForSms(long idSms){
+            String queryText = String.format("select c.%1$s, c.%2$s from category c left join sms_category sc on c.id = sc.id_category where sc.id_sms = %3$s",
+                    TableCategory.COLUMN_ID,
+                    TableCategory.COLUMN_NAME,
+                    idSms);
+            Cursor mCursor = mDataBase.rawQuery(queryText, new String [] {});
+            try {
+                mCursor.moveToFirst();
+                if (!mCursor.isAfterLast()) {
+                    long id = mCursor.getLong(TableCategory.NUM_COLUMN_ID);
+                    String name = mCursor.getString(TableCategory.NUM_COLUMN_NAME);
+                    return new DbCategory(id, name, null);
+                } else {
+                    return null;
+                }
+            } finally {
+                mCursor.close();
+            }
+        }
         public ArrayList<DbCategory> selectAll(){
-            Cursor mCursor = mDataBase.query(TableCategory.TABLE_NAME, null, null, null, null, null, TableCategory.COLUMN_NAME);
             ArrayList<DbCategory> arr = new ArrayList<>();
+            return getAllCategories(arr);
+        }
+        public ArrayList<DbCategory> selectWithEmpty(){
+            ArrayList<DbCategory> arr = new ArrayList<>();
+            arr.add(DbCategory.getEmptyCategory(mContext));
+            return getAllCategories(arr);
+
+        }
+        private ArrayList<DbCategory> getAllCategories(ArrayList<DbCategory> dbCategories){
+            Cursor mCursor = mDataBase.query(TableCategory.TABLE_NAME, null, null, null, null, null, TableCategory.COLUMN_NAME);
             try {
                 mCursor.moveToFirst();
                 if (!mCursor.isAfterLast()) {
                     do {
                         long id = mCursor.getLong(TableCategory.NUM_COLUMN_ID);
                         String name = mCursor.getString(TableCategory.NUM_COLUMN_NAME);
-                        arr.add(new DbCategory(id, name, null));
+                        dbCategories.add(new DbCategory(id, name, null));
                     } while (mCursor.moveToNext());
                 }
             } finally {
                 mCursor.close();
             }
-            return arr;
+            return dbCategories;
         }
-        public long addSms(long id_sms, long id_category){
-            ContentValues cv = new ContentValues();
-            cv.put(TableSmsCategory.COLUMN_ID_SMS, id_sms);
-            cv.put(TableSmsCategory.COLUMN_ID_CATEGORY, id_category);
-
-            return mDataBase.insert(TableSmsCategory.TABLE_NAME, null, cv);
-        }
-        public void removeSms(long id_sms, long id_category){
-            mDataBase.delete(TableSmsCategory.TABLE_NAME, TableSmsCategory.COLUMN_ID_SMS +
-                    " = ? AND " + TableSmsCategory.COLUMN_ID_CATEGORY + " = ?", new String[] { String.valueOf(id_sms), String.valueOf(id_category) });
-        }
-        @NotNull
         public ArrayList<DbSms> getSelectedSms(DbCategory category){
             ArrayList<DbSms> arr = new ArrayList<>();
             if (category == null) {
@@ -305,7 +357,6 @@ public class DbConnector {
             }
             return arr;
         }
-        @NotNull
         public ArrayList<DbSms> getAvailableSms(){
             String queryText = String.format("select s.%1$s, s.%2$s, s.%3$s, s.%4$s, s.%5$s  from sms s where s.id not in (select sc.id_sms from sms_category sc)",
                     TableSms.COLUMN_ID,
@@ -333,7 +384,7 @@ public class DbConnector {
             }
             return arr;
         }
-
+        // endregion
     }
 
     // Таблица шаблонов Sms

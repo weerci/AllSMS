@@ -34,7 +34,7 @@
     <string name="category_remove_sms">Удалить выбранный шаблон из категории?</string>
     <string name="category_add_title">Добавить шаблон</string>
     <string name="category_remove_title">Удалить шаблон</string>
-
+    <string name="category_null">--Категория не выбрана--</string>
 
     <string name="sms_sender_title">Отправить сообщение?</string>
     <string name="sms_sender_text">Следующий текст \'%1$s\', будет отправлен на номер \'%2$s\'.</string>

@@ -35,6 +35,7 @@
     <string name="category_remove_sms">Remove selected sms-template from category?</string>
     <string name="category_add_title">Add template</string>
     <string name="category_remove_title">Remove template</string>
+    <string name="category_null">--Without category--</string>
 
     <string name="sms_sender_title">Send message?</string>
     <string name="sms_sender_text">This text \'%1$s\', will be send to the number \'%2$s\'.</string>

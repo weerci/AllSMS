@@ -106,6 +106,7 @@ public class PageSmsFragment extends Fragment {
                 return true;
             case R.id.menu_item_edit_template:
                 Intent i = new Intent(getActivity(), EditSmsActivity.class);
+                dbSms.setCategory(DbConnector.newInstance(getActivity()).getCategory().selectForSms(dbSms.getId()));
                 i.putExtra(EditSmsFragment.EXTRA_SMS, dbSms);
                 startActivityForResult(i, SMS_UPDATE);
                 return true;
@@ -196,12 +197,6 @@ public class PageSmsFragment extends Fragment {
             setArrayDbSms(arr);
         }
 
-// --Commented out by Inspection START (20.02.2015 21:11):
-//        public ArrayList<DbSms> getArrayMyData() {
-//            return arrayDbSms;
-//        }
-// --Commented out by Inspection STOP (20.02.2015 21:11)
-
         public void setArrayDbSms(ArrayList<DbSms> arrayDbSms) {
             this.arrayDbSms = arrayDbSms;
         }
@@ -237,7 +232,6 @@ public class PageSmsFragment extends Fragment {
             TextView phoneTextView = (TextView)convertView.findViewById(R.id.sms_list_item_phone_text_view);
             phoneTextView.setText(getResources().getString(R.string.phone_prefix) + ds.getPhoneNumber());
 
-            // Favorite button
             boolean isFavorite = ds.getPriority() != 0;
             ImageView imageView = (ImageView)convertView.findViewById(R.id.sms_list_img_favorite);
             if (isFavorite) {
@@ -245,29 +239,6 @@ public class PageSmsFragment extends Fragment {
             } else {
                 imageView.setImageResource(R.drawable.ic_action_not_important);
             }
-
-
-//            imageButton.setOnClickListener( new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    View parentRow = (View) v.getParent();
-//                    ListView listView = (ListView) parentRow.getParent();
-//                    final int position = listView.getPositionForView(parentRow);
-//                    ListAdapter listAdapter = (SmsAdapter)listView.getAdapter();
-//                    DbSms dbSms = (DbSms)listAdapter.getItem(position);
-//                    int priority = dbSms.getPriority() != 0 ? 0 : 1;
-//                    DbSms newDbSms = new DbSms(dbSms.getId(), dbSms.getTitleSms(), dbSms.getTextSms(),
-//                            dbSms.getPhoneNumber(), priority);
-//                    DbSms dms =
-//
-//                    ListView listView = new ListView(getActivity(), null, null, null);
-//                    listView.getPositionForView(v);
-//                    DbSms dbSms = new DbSms(ds.getId(), ds.getTitleSms(), ds.getTextSms(), ds.getPhoneNumber(),
-//                            );
-//
-//                }
-//            });
-
 
             return convertView;
         }
