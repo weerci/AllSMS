@@ -1,5 +1,8 @@
 package com.production.kriate.allsms;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -8,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +27,8 @@ import com.production.kriate.allsms.fragments.PageSmsFragment;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 
 /*
@@ -120,8 +126,11 @@ public class ActivitySingle extends ActionBarActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                selectItem(0, 0);
-                return true;
+                if (this.getLocalClassName().equals("ActivitySingle")) {
+                    selectItem(0, 0);
+                    return true;
+                }
+
             case KeyEvent.KEYCODE_MENU:
                 if(mDrawerLayout.isDrawerVisible(GravityCompat.START)){
                     mDrawerLayout.closeDrawer(GravityCompat.START);
