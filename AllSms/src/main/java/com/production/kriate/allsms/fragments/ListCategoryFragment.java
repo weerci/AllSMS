@@ -53,6 +53,16 @@ public class ListCategoryFragment extends Fragment{
 
         View v = inflater.inflate(R.layout.list_category_layout, container, false);
         ListView listView = (ListView) v.findViewById(R.id.list_view_category);
+        listView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DbCategory dbCategory = mCategoryListAdapter.arrayDbCategory.get(position);
+                Intent i = new Intent(getActivity(), EditCategoryActivity.class);
+                i.putExtra(EditCategoryFragment.EXTRA_CATEGORY, dbCategory);
+                startActivityForResult(i, CATEGORY_UPDATE);
+
+            }
+        });
         listView.setAdapter(mCategoryListAdapter);
         registerForContextMenu(listView);
 
@@ -72,7 +82,7 @@ public class ListCategoryFragment extends Fragment{
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        getActivity().getMenuInflater().inflate(R.menu.sms_list_item_context, menu);
+        getActivity().getMenuInflater().inflate(R.menu.menu_list_category_context, menu);
     }
     @Override
     public boolean onContextItemSelected(@NotNull MenuItem item) {
@@ -81,14 +91,9 @@ public class ListCategoryFragment extends Fragment{
 
         DbCategory dbCategory = mCategoryListAdapter.arrayDbCategory.get(position);
         switch (item.getItemId()) {
-            case R.id.menu_item_delete_template:
+            case R.id.menu_category_delete_template:
                 DbConnector.newInstance(getActivity()).getCategory().deleteOne(dbCategory.getId());
                 updateList();
-                return true;
-            case R.id.menu_item_edit_template:
-                Intent i = new Intent(getActivity(), EditCategoryActivity.class);
-                i.putExtra(EditCategoryFragment.EXTRA_CATEGORY, dbCategory);
-                startActivityForResult(i, CATEGORY_UPDATE);
                 return true;
         }
         return super.onContextItemSelected(item);
