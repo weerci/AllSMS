@@ -26,6 +26,10 @@
     <string name="cancel">Cancel</string>
     <string name="empty_categroy">Category not present</string>
 
+    <!--Настройки-->
+    <string name="setting_purchase_text">If you want to create more than two categories, you can buy them on google pay. To begin purchase?</string>
+    <string name="header_purchase_editor">Purchase of categories</string>
+
     <!--Редактирование категории-->
     <string name="header_category_editor">Edit of categroy</string>
     <string name="category_name_label">Name category</string>

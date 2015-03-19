@@ -23,11 +23,15 @@
         </activity>
         <activity
             android:name=".EditCategoryActivity"
-            android:label="@string/header_template_editor" >
+            android:label="@string/header_category_editor" >
         </activity>
         <activity
             android:name=".EditSmsActivity"
             android:label="@string/header_template_editor" >
+        </activity>
+        <activity
+            android:name=".PurchaseActivity"
+            android:label="@string/header_purchase_editor" >
         </activity>
 
     </application>

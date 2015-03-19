@@ -78,8 +78,11 @@ public class ActivitySingle extends ActionBarActivity {
         });
 
 
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeButtonEnabled(true);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 this, /* host Activity */
@@ -108,7 +111,6 @@ public class ActivitySingle extends ActionBarActivity {
             selectItem(0, 0);
         }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

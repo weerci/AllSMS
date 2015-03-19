@@ -26,6 +26,10 @@
     <string name="cancel">Отмена</string>
     <string name="empty_categroy">Категория не задана</string>
 
+    <!--Настройки-->
+    <string name="setting_purchase_text">Если вы хотите создать более чем две категории, Вы можете приобрести эту функциональность на Google Pay.\nНачать процесс покупки?</string>
+    <string name="header_purchase_editor">Покупка категорий</string>
+
     <!--Редактирование категории-->
     <string name="header_category_editor">Редактирование катерогии</string>
     <string name="category_name_label">Имя категории</string>
