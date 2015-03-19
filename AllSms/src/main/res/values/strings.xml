@@ -9,6 +9,7 @@
     <string name="sms_delete_template">Delete</string>
     <string name="sms_edit_template">Edit</string>
     <string name="image_content_plane">Sms how plane</string>
+    <string name="sms_exit">Exit</string>
 
     <!-- Редактирование шаблона -->
     <string name="header_template_editor">Edit of template</string>
@@ -51,6 +52,7 @@
     <string-array name="screen_array">
         <item>All Sms</item>
         <item>Category</item>
+        <item>Settings</item>
         <item>About</item>
     </string-array>
     <string name="drawer_open">Open navigation drawer</string>

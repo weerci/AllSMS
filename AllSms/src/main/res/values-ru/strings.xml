@@ -9,6 +9,7 @@
     <string name="sms_delete_template">Удалить</string>
     <string name="sms_edit_template">Редактировать</string>
     <string name="image_content_plane">Sms как самолет</string>
+    <string name="sms_exit">Выход</string>
 
     <!-- Редактирование шаблона -->
     <string name="header_template_editor">Редактирование шаблона</string>
@@ -51,6 +52,7 @@
     <string-array name="screen_array">
         <item>Все СМС</item>
         <item>Категории</item>
+        <item>Настройки</item>
         <item>О программе</item>
     </string-array>
     <string name="drawer_open">Открыть навигационную панель</string>

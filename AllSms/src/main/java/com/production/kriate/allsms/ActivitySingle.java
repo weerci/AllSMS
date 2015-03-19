@@ -20,10 +20,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.production.kriate.allsms.fragments.AboutFragment;
 import com.production.kriate.allsms.fragments.ListCategoryFragment;
 import com.production.kriate.allsms.fragments.PageSmsFragment;
+import com.production.kriate.allsms.fragments.SettingsFragment;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,6 +42,8 @@ public class ActivitySingle extends ActionBarActivity {
     private String[] mScreenTitles;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+    private RelativeLayout mRelativeLayout;
+    private TextView mExit;
 
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
@@ -54,9 +59,24 @@ public class ActivitySingle extends ActionBarActivity {
         mScreenTitles = getResources().getStringArray(R.array.screen_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mRelativeLayout = (RelativeLayout) findViewById(R.id.relative_layout);
 
         mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, mScreenTitles));
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerList.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int START_PAGE = 0;
+                selectItem(position, START_PAGE);
+            }
+        });
+        mExit = (TextView) findViewById(R.id.text_view_exit);
+        mExit.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -88,6 +108,7 @@ public class ActivitySingle extends ActionBarActivity {
             selectItem(0, 0);
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -96,7 +117,8 @@ public class ActivitySingle extends ActionBarActivity {
     }
     @Override
     public boolean onPrepareOptionsMenu(@NotNull Menu menu) {
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mRelativeLayout);
         menu.findItem(R.id.menu_item_new_template).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -142,13 +164,6 @@ public class ActivitySingle extends ActionBarActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            int START_PAGE = 0;
-            selectItem(position, START_PAGE);
-        }
-    }
     public void selectItem(int position, int indexPage) {
         Fragment fragment = null;
         switch (position) {
@@ -159,6 +174,9 @@ public class ActivitySingle extends ActionBarActivity {
                 fragment = ListCategoryFragment.newInstance();
                 break;
             case 2:
+                fragment = SettingsFragment.newInstance();
+                break;
+            case 3:
                 fragment = AboutFragment.newInstance();
                 break;
             default:
@@ -175,7 +193,7 @@ public class ActivitySingle extends ActionBarActivity {
             } else{
                 setTitle(mScreenTitles[position]);
             }
-            mDrawerLayout.closeDrawer(mDrawerList);
+            mDrawerLayout.closeDrawer(mRelativeLayout);
         }
     }
 
